@@ -1,13 +1,3 @@
-variable "location" {
-  description = "The Azure Region to deploy the resource into."
-  type        = string
-
-  validation {
-    condition     = contains(["centralus", "eastus2", "southafricanorth", "southafricawest"], var.location)
-    error_message = "Must be one of: centralus, eastus2, southafricanorth, southafricawest."
-  }
-}
-
 variable "name" {
   description = "The name tokens used to construct the resource name and tags."
   type = object({

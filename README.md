@@ -30,18 +30,6 @@ locals {
   }
 }
 
-module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.2"
-
-  contact     = local.name.contact
-  environment = local.name.environment
-  location    = "centralus"
-  program     = local.name.program
-  repository  = local.name.repository
-  workload    = local.name.workload
-}
-
 resource "random_pet" "instance_id" {}
 
 resource "azurerm_resource_group" "example" {
@@ -53,7 +41,6 @@ resource "azurerm_resource_group" "example" {
 module "example" {
   source = "../.."
 
-  location       = azurerm_resource_group.example.location
   resource_group = azurerm_resource_group.example
 
   name = {
@@ -69,12 +56,6 @@ module "example" {
 ## Required Inputs
 
 The following input variables are required:
-
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure Region to deploy the resource into.
-
-Type: `string`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
@@ -122,9 +103,9 @@ Default: `{}`
 
 The following outputs are exported:
 
-### <a name="output_storage_account"></a> [storage\_account](#output\_storage\_account)
+### <a name="output_storage_account_id"></a> [storage\_account\_id](#output\_storage\_account\_id)
 
-Description: All of the Storage Account attributes.
+Description: Storage Account ID.
 
 ## Resources
 

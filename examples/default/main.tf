@@ -10,18 +10,6 @@ locals {
   }
 }
 
-module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.2"
-
-  contact     = local.name.contact
-  environment = local.name.environment
-  location    = "centralus"
-  program     = local.name.program
-  repository  = local.name.repository
-  workload    = local.name.workload
-}
-
 resource "random_pet" "instance_id" {}
 
 resource "azurerm_resource_group" "example" {
@@ -33,7 +21,6 @@ resource "azurerm_resource_group" "example" {
 module "example" {
   source = "../.."
 
-  location       = azurerm_resource_group.example.location
   resource_group = azurerm_resource_group.example
 
   name = {
