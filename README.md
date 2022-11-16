@@ -1,6 +1,16 @@
-# Azure App Service
+# Azure Storage Account
 
-Creates an Azure App Service (Windows)
+Creates an Azure Storage Account
+- [Storage Account](#azure-storage-account)
+    - [Example](#example)
+    - [Required Inputs](#required-inputs)
+    - [Optional Inputs](#optional-inputs)
+    - [Outputs](#outputs)
+    - [Resources](#resources)
+    - [Requirements](#requirements)
+    - [Providers](#providers)
+    - [Modules](#modules)
+    - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
 
@@ -8,24 +18,50 @@ Creates an Azure App Service (Windows)
 ## Example
 
 ```hcl
+locals {
+  test_namespace = random_pet.instance_id.id
+
+  name = {
+    contact     = "nobody@dell.org"
+    environment = "sbx"
+    program     = "dyl"
+    repository  = "terraform-azurerm-key-vault"
+    workload    = "apps"
+  }
+}
+
+module "name" {
+  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  version = "0.0.2"
+
+  contact     = local.name.contact
+  environment = local.name.environment
+  location    = "centralus"
+  program     = local.name.program
+  repository  = local.name.repository
+  workload    = local.name.workload
+}
+
+resource "random_pet" "instance_id" {}
+
+resource "azurerm_resource_group" "example" {
+  location = "centralus"
+  name     = "rg-${local.test_namespace}"
+  tags     = module.name.tags
+}
+
 module "example" {
   source = "../.."
 
-  location = "centralus"
+  location       = azurerm_resource_group.example.location
+  resource_group = azurerm_resource_group.example
 
-  # The following tokens are optional: instance, program
   name = {
-    workload    = "apps"
-    instance    = 0
+    contact     = "nobody@dell.org"
     environment = "sbx"
     program     = "dyl"
-  }
-
-  # Program is optional. To meet compliance requirements, the module uses "Shared" when the tag is omitted.
-  required_tags = {
-    Contact    = "nobody@dell.org"
-    Program    = "DYL"
-    Repository = "terraform-azurerm-resource-group"
+    repository  = "terraform-azurerm-storage-account"
+    workload    = "apps"
   }
 }
 ```
@@ -42,44 +78,37 @@ Type: `string`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
-Description: The name tokens used to construct the resource name.
+Description: The name tokens used to construct the resource name and tags.
 
 Type:
 
 ```hcl
 object({
+    contact     = string
     environment = string
     instance    = optional(number)
     program     = optional(string)
+    repository  = string
     workload    = string
   })
 ```
 
-### <a name="input_required_tags"></a> [required\_tags](#input\_required\_tags)
+### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
 
-Description: A map of tags required to meet the tag compliance policy.
+Description: The resource group to deploy resources into
 
 Type:
 
 ```hcl
 object({
-    Contact    = string
-    Program    = optional(string, "Shared")
-    Repository = string
+    location = string
+    name     = string
   })
 ```
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
-
-### <a name="input_expiration_years"></a> [expiration\_years](#input\_expiration\_years)
-
-Description: Used to calculate the value of the EndDate tag by adding the specified number of years to the CreateDate tag.
-
-Type: `number`
-
-Default: `1`
 
 ### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
 
@@ -91,15 +120,17 @@ Default: `{}`
 
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_storage_account"></a> [storage\_account](#output\_storage\_account)
+
+Description: All of the Storage Account attributes.
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [time_offset.end_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/offset) (resource)
-- [time_static.create_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) (resource)
+- [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 
 ## Requirements
 
@@ -117,11 +148,15 @@ The following providers are used by this module:
 
 - <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.28.0)
 
-- <a name="provider_time"></a> [time](#provider\_time) (~> 0.9.1)
-
 ## Modules
 
-No modules.
+The following Modules are called:
+
+### <a name="module_name"></a> [name](#module\_name)
+
+Source: app.terraform.io/dellfoundation/namer/terraform
+
+Version: 0.0.2
 <!-- END_TF_DOCS -->
 
 ## Update Docs

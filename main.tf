@@ -1,23 +1,38 @@
 locals {
-  name = join("-", compact(["rg", var.name.workload, var.name.environment, var.location, var.name.program, var.name.instance]))
-  tags = merge(local.default_tags, var.required_tags, var.optional_tags)
+  tags = merge(module.name.tags, var.optional_tags)
+}
 
-  default_tags = {
-    CreateDate = formatdate("YYYY-MM-DD", time_static.create_date.rfc3339)
-    EndDate    = formatdate("YYYY-MM-DD", time_offset.end_date.rfc3339)
-    Source     = "IAC"
+module "name" {
+  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  version = "0.0.2"
+
+  contact     = var.name.contact
+  environment = var.name.environment
+  instance    = var.name.instance
+  location    = var.resource_group.location
+  program     = var.name.program
+  repository  = var.name.repository
+  workload    = var.name.workload
+}
+
+resource "azurerm_storage_account" "sa" {
+  account_replication_type  = "GRS"
+  account_tier              = "Standard"
+  enable_https_traffic_only = true
+  location                  = var.resource_group.location
+  min_tls_version           = "TLS1_2"
+  name                      = "satst${module.name.resource_suffix_compact}"
+  resource_group_name       = var.resource_group.name
+  tags                      = local.tags
+
+  identity {
+    type = "SystemAssigned"
   }
-}
 
-resource "time_static" "create_date" {}
-
-resource "time_offset" "end_date" {
-  base_rfc3339 = time_static.create_date.id
-  offset_years = var.expiration_years
-}
-
-resource "azurerm_resource_group" "rg" {
-  location = var.location
-  name     = local.name
-  tags     = local.tags
+  network_rules {
+    bypass                     = []
+    default_action             = "Allow"
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+  }
 }
