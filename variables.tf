@@ -10,6 +10,11 @@ variable "name" {
   })
 }
 
+variable "log_analytics_workspace_id" {
+  description = "The workspace to write logs into."
+  type        = string
+}
+
 variable "optional_tags" {
   default     = {}
   description = "A map of additional tags for the resource."

@@ -34,8 +34,6 @@ resource "azurerm_storage_account" "sa" {
     versioning_enabled = true
   }
 
-
-
   identity {
     type = "SystemAssigned"
   }

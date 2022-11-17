@@ -25,7 +25,7 @@ locals {
     contact     = "nobody@dell.org"
     environment = "sbx"
     program     = "dyl"
-    repository  = "terraform-azurerm-key-vault"
+    repository  = "terraform-storage-account"
     workload    = "apps"
   }
 }
@@ -38,10 +38,20 @@ resource "azurerm_resource_group" "example" {
   tags     = module.name.tags
 }
 
+resource "azurerm_log_analytics_workspace" "example" {
+  name                = "la-${local.test_namespace}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+  tags                = module.name.tags
+}
+
 module "example" {
   source = "../.."
 
-  resource_group = azurerm_resource_group.example
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
+  resource_group             = azurerm_resource_group.example
 
   name = {
     contact     = "nobody@dell.org"
@@ -56,6 +66,12 @@ module "example" {
 ## Required Inputs
 
 The following input variables are required:
+
+### <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id)
+
+Description: The workspace to write logs into.
+
+Type: `string`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
@@ -111,7 +127,9 @@ Description: Storage Account ID.
 
 The following resources are used by this module:
 
+- [azurerm_monitor_diagnostic_setting.setting](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) (resource)
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
+- [azurerm_monitor_diagnostic_categories.categories](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/monitor_diagnostic_categories) (data source)
 
 ## Requirements
 
