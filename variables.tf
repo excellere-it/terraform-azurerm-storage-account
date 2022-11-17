@@ -1,32 +1,18 @@
-variable "expiration_years" {
-  default     = 1
-  description = "Used to calculate the value of the EndDate tag by adding the specified number of years to the CreateDate tag."
-  type        = number
-
-  validation {
-    condition     = 0 < var.expiration_years
-    error_message = "Expiration years must be greater than zero."
-  }
-}
-
-variable "location" {
-  description = "The Azure Region to deploy the resource into."
-  type        = string
-
-  validation {
-    condition     = contains(["centralus", "eastus2", "southafricanorth", "southafricawest"], var.location)
-    error_message = "Must be one of: centralus, eastus2, southafricanorth, southafricawest."
-  }
-}
-
 variable "name" {
-  description = "The name tokens used to construct the resource name."
+  description = "The name tokens used to construct the resource name and tags."
   type = object({
+    contact     = string
     environment = string
     instance    = optional(number)
     program     = optional(string)
+    repository  = string
     workload    = string
   })
+}
+
+variable "log_analytics_workspace_id" {
+  description = "The workspace to write logs into."
+  type        = string
 }
 
 variable "optional_tags" {
@@ -35,11 +21,11 @@ variable "optional_tags" {
   type        = map(string)
 }
 
-variable "required_tags" {
-  description = "A map of tags required to meet the tag compliance policy."
+variable "resource_group" {
+  description = "The resource group to deploy resources into"
+
   type = object({
-    Contact    = string
-    Program    = optional(string, "Shared")
-    Repository = string
+    location = string
+    name     = string
   })
 }

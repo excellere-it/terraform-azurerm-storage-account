@@ -27,3 +27,7 @@ upgrade: fmt docs
 # Example: make deploy
 deploy: fmt docs
 	cd ./examples/default && terraform apply
+
+# Example: make destroy
+destroy: fmt docs
+	cd ./examples/default && terraform destroy
