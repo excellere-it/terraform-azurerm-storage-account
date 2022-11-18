@@ -8,6 +8,7 @@ Creates an Azure Storage Account
     - [<a name="input_name"></a> name](#-name)
     - [<a name="input_resource_group"></a> resource\_group](#-resource_group)
   - [Optional Inputs](#optional-inputs)
+    - [<a name="input_expiration_days"></a> expiration\_days](#-expiration_days)
     - [<a name="input_optional_tags"></a> optional\_tags](#-optional_tags)
   - [Outputs](#outputs)
     - [<a name="output_storage_account_id"></a> storage\_account\_id](#-storage_account_id)
@@ -15,6 +16,7 @@ Creates an Azure Storage Account
   - [Requirements](#requirements)
   - [Providers](#providers)
   - [Modules](#modules)
+    - [<a name="module_diagnostics"></a> diagnostics](#-diagnostics)
     - [<a name="module_name"></a> name](#-name-1)
   - [Update Docs](#update-docs)
 
@@ -25,14 +27,6 @@ Creates an Azure Storage Account
 ```hcl
 locals {
   test_namespace = random_pet.instance_id.id
-
-  name = {
-    contact     = "nobody@dell.org"
-    environment = "sbx"
-    program     = "dyl"
-    repository  = "terraform-storage-account"
-    workload    = "apps"
-  }
 }
 
 resource "random_pet" "instance_id" {}
@@ -44,11 +38,11 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_log_analytics_workspace" "example" {
-  name                = "la-${local.test_namespace}"
   location            = azurerm_resource_group.example.location
+  name                = "la-${local.test_namespace}"
   resource_group_name = azurerm_resource_group.example.name
-  sku                 = "PerGB2018"
   retention_in_days   = 30
+  sku                 = "PerGB2018"
   tags                = module.name.tags
 }
 
@@ -61,6 +55,7 @@ module "example" {
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"
+    instance    = 0
     program     = "dyl"
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
@@ -112,6 +107,14 @@ object({
 
 The following input variables are optional (have default values):
 
+### <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days)
+
+Description: Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag.
+
+Type: `number`
+
+Default: `365`
+
 ### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
 
 Description: A map of additional tags for the resource.
@@ -132,9 +135,7 @@ Description: Storage Account ID.
 
 The following resources are used by this module:
 
-- [azurerm_monitor_diagnostic_setting.setting](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) (resource)
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
-- [azurerm_monitor_diagnostic_categories.categories](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/monitor_diagnostic_categories) (data source)
 
 ## Requirements
 
@@ -155,6 +156,12 @@ The following providers are used by this module:
 ## Modules
 
 The following Modules are called:
+
+### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
+
+Source: app.terraform.io/dellfoundation/diagnostics/azurerm
+
+Version: 0.0.3
 
 ### <a name="module_name"></a> [name](#module\_name)
 

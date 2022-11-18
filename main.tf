@@ -1,18 +1,16 @@
-locals {
-  tags = merge(module.name.tags, var.optional_tags)
-}
-
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
   version = "0.0.2"
 
-  contact     = var.name.contact
-  environment = var.name.environment
-  instance    = var.name.instance
-  location    = var.resource_group.location
-  program     = var.name.program
-  repository  = var.name.repository
-  workload    = var.name.workload
+  contact         = var.name.contact
+  environment     = var.name.environment
+  expiration_days = var.expiration_days
+  instance        = var.name.instance
+  location        = var.resource_group.location
+  optional_tags   = var.optional_tags
+  program         = var.name.program
+  repository      = var.name.repository
+  workload        = var.name.workload
 }
 
 resource "azurerm_storage_account" "sa" {
@@ -23,9 +21,9 @@ resource "azurerm_storage_account" "sa" {
   infrastructure_encryption_enabled = true
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
-  name                              = "satst${module.name.resource_suffix_compact}"
+  name                              = "sa${module.name.resource_suffix_compact}"
   resource_group_name               = var.resource_group.name
-  tags                              = local.tags
+  tags                              = module.name.tags
 
   blob_properties {
     container_delete_retention_policy { days = 30 }

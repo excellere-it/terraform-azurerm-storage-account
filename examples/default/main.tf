@@ -1,13 +1,5 @@
 locals {
   test_namespace = random_pet.instance_id.id
-
-  name = {
-    contact     = "nobody@dell.org"
-    environment = "sbx"
-    program     = "dyl"
-    repository  = "terraform-storage-account"
-    workload    = "apps"
-  }
 }
 
 resource "random_pet" "instance_id" {}
@@ -19,11 +11,11 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_log_analytics_workspace" "example" {
-  name                = "la-${local.test_namespace}"
   location            = azurerm_resource_group.example.location
+  name                = "la-${local.test_namespace}"
   resource_group_name = azurerm_resource_group.example.name
-  sku                 = "PerGB2018"
   retention_in_days   = 30
+  sku                 = "PerGB2018"
   tags                = module.name.tags
 }
 
@@ -36,6 +28,7 @@ module "example" {
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"
+    instance    = 0
     program     = "dyl"
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"

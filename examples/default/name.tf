@@ -2,10 +2,10 @@ module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
   version = "0.0.2"
 
-  contact     = local.name.contact
-  environment = local.name.environment
+  contact     = "nobody@dell.org"
+  environment = "sbx"
   location    = "centralus"
-  program     = local.name.program
-  repository  = local.name.repository
-  workload    = local.name.workload
+  program     = "dyl"
+  repository  = "terraform-storage-account"
+  workload    = "apps"
 }
