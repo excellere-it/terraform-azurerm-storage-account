@@ -1,19 +1,24 @@
 # Azure Storage Account
 
 Creates an Azure Storage Account
-- [Storage Account](#azure-storage-account)
-    - [Example](#example)
-    - [Required Inputs](#required-inputs)
-    - [Optional Inputs](#optional-inputs)
-    - [Outputs](#outputs)
-    - [Resources](#resources)
-    - [Requirements](#requirements)
-    - [Providers](#providers)
-    - [Modules](#modules)
-    - [Update Docs](#update-docs)
+- [Azure Storage Account](#azure-storage-account)
+  - [Example](#example)
+  - [Required Inputs](#required-inputs)
+    - [<a name="input_log_analytics_workspace_id"></a> log\_analytics\_workspace\_id](#-log_analytics_workspace_id)
+    - [<a name="input_name"></a> name](#-name)
+    - [<a name="input_resource_group"></a> resource\_group](#-resource_group)
+  - [Optional Inputs](#optional-inputs)
+    - [<a name="input_optional_tags"></a> optional\_tags](#-optional_tags)
+  - [Outputs](#outputs)
+    - [<a name="output_storage_account_id"></a> storage\_account\_id](#-storage_account_id)
+  - [Resources](#resources)
+  - [Requirements](#requirements)
+  - [Providers](#providers)
+  - [Modules](#modules)
+    - [<a name="module_name"></a> name](#-name-1)
+  - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
-
 
 ## Example
 
@@ -137,15 +142,15 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.28.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.31)
 
-- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9.1)
+- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.28.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.31)
 
 ## Modules
 
