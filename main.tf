@@ -1,6 +1,6 @@
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.2"
+  version = "0.0.3"
 
   contact         = var.name.contact
   environment     = var.name.environment
@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "sa" {
   infrastructure_encryption_enabled = true
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
-  name                              = "sa${module.name.resource_suffix_compact}"
+  name                              = "sa${module.name.resource_suffix_short_compact}"
   resource_group_name               = var.resource_group.name
   tags                              = module.name.tags
 

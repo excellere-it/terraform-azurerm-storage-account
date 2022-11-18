@@ -167,7 +167,7 @@ Version: 0.0.3
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.2
+Version: 0.0.3
 <!-- END_TF_DOCS -->
 
 ## Update Docs
