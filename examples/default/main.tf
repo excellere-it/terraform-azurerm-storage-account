@@ -25,6 +25,10 @@ module "example" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
 
+  containers = [
+    "sqlreports"
+  ]
+
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"

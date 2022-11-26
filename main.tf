@@ -42,3 +42,11 @@ resource "azurerm_storage_account" "sa" {
     virtual_network_subnet_ids = []
   }
 }
+
+resource "azurerm_storage_container" "container" {
+  for_each = toset(var.containers)
+
+  name                  = each.key
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}

@@ -4,20 +4,21 @@ Creates an Azure Storage Account
 - [Azure Storage Account](#azure-storage-account)
   - [Example](#example)
   - [Required Inputs](#required-inputs)
-    - [<a name="input_log_analytics_workspace_id"></a> log\_analytics\_workspace\_id](#-log_analytics_workspace_id)
-    - [<a name="input_name"></a> name](#-name)
-    - [<a name="input_resource_group"></a> resource\_group](#-resource_group)
+    - [ log\_analytics\_workspace\_id](#-log_analytics_workspace_id)
+    - [ name](#-name)
+    - [ resource\_group](#-resource_group)
   - [Optional Inputs](#optional-inputs)
-    - [<a name="input_expiration_days"></a> expiration\_days](#-expiration_days)
-    - [<a name="input_optional_tags"></a> optional\_tags](#-optional_tags)
+    - [ containers](#-containers)
+    - [ expiration\_days](#-expiration_days)
+    - [ optional\_tags](#-optional_tags)
   - [Outputs](#outputs)
-    - [<a name="output_storage_account_id"></a> storage\_account\_id](#-storage_account_id)
+    - [ storage\_account\_id](#-storage_account_id)
   - [Resources](#resources)
   - [Requirements](#requirements)
   - [Providers](#providers)
   - [Modules](#modules)
-    - [<a name="module_diagnostics"></a> diagnostics](#-diagnostics)
-    - [<a name="module_name"></a> name](#-name-1)
+    - [ diagnostics](#-diagnostics)
+    - [ name](#-name-1)
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
@@ -51,6 +52,10 @@ module "example" {
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
+
+  containers = [
+    "sqlreports"
+  ]
 
   name = {
     contact     = "nobody@dell.org"
@@ -107,6 +112,14 @@ object({
 
 The following input variables are optional (have default values):
 
+### <a name="input_containers"></a> [containers](#input\_containers)
+
+Description: When provided the module will create private blob containers for each item in the list.
+
+Type: `list(string)`
+
+Default: `[]`
+
 ### <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days)
 
 Description: Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag.
@@ -136,6 +149,7 @@ Description: Storage Account ID.
 The following resources are used by this module:
 
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
+- [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) (resource)
 
 ## Requirements
 

@@ -1,3 +1,9 @@
+variable "containers" {
+  default     = []
+  description = "When provided the module will create private blob containers for each item in the list."
+  type        = list(string)
+}
+
 variable "expiration_days" {
   default     = 365
   description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag."
