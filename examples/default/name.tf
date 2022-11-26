@@ -6,6 +6,6 @@ module "name" {
   environment = "sbx"
   location    = "centralus"
   program     = "dyl"
-  repository  = "terraform-storage-account"
+  repository  = "terraform-azurerm-storage-account"
   workload    = "apps"
 }

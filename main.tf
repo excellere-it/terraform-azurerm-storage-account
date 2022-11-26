@@ -50,3 +50,12 @@ resource "azurerm_storage_container" "container" {
   storage_account_name  = azurerm_storage_account.sa.name
   container_access_type = "private"
 }
+
+resource "azurerm_storage_share" "share" {
+  for_each = toset(var.shares)
+
+  enabled_protocol     = "SMB"
+  name                 = each.key
+  quota                = 50
+  storage_account_name = azurerm_storage_account.sa.name
+}

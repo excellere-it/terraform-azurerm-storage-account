@@ -46,3 +46,9 @@ variable "resource_group" {
     name     = string
   })
 }
+
+variable "shares" {
+  default     = []
+  description = "When provided the module will create file shares for each item in the list."
+  type        = list(string)
+}

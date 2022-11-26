@@ -11,6 +11,7 @@ Creates an Azure Storage Account
     - [ containers](#-containers)
     - [ expiration\_days](#-expiration_days)
     - [ optional\_tags](#-optional_tags)
+    - [ shares](#-shares)
   - [Outputs](#outputs)
     - [ storage\_account\_id](#-storage_account_id)
   - [Resources](#resources)
@@ -65,6 +66,10 @@ module "example" {
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
   }
+
+  shares = [
+    "university-success"
+  ]
 }
 ```
 
@@ -136,6 +141,14 @@ Type: `map(string)`
 
 Default: `{}`
 
+### <a name="input_shares"></a> [shares](#input\_shares)
+
+Description: When provided the module will create file shares for each item in the list.
+
+Type: `list(string)`
+
+Default: `[]`
+
 ## Outputs
 
 The following outputs are exported:
@@ -150,6 +163,7 @@ The following resources are used by this module:
 
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 - [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) (resource)
+- [azurerm_storage_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_share) (resource)
 
 ## Requirements
 

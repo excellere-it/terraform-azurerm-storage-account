@@ -37,4 +37,8 @@ module "example" {
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
   }
+
+  shares = [
+    "university-success"
+  ]
 }
