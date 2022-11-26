@@ -13,13 +13,15 @@ Creates an Azure Storage Account
     - [ optional\_tags](#-optional_tags)
     - [ shares](#-shares)
   - [Outputs](#outputs)
-    - [ storage\_account\_id](#-storage_account_id)
+    - [ id](#-id)
+    - [ name](#-name-1)
+    - [ primary\_access\_key](#-primary_access_key)
   - [Resources](#resources)
   - [Requirements](#requirements)
   - [Providers](#providers)
   - [Modules](#modules)
     - [ diagnostics](#-diagnostics)
-    - [ name](#-name-1)
+    - [ name](#-name-2)
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
@@ -153,9 +155,17 @@ Default: `[]`
 
 The following outputs are exported:
 
-### <a name="output_storage_account_id"></a> [storage\_account\_id](#output\_storage\_account\_id)
+### <a name="output_id"></a> [id](#output\_id)
 
 Description: Storage Account ID.
+
+### <a name="output_name"></a> [name](#output\_name)
+
+Description: The storage account name.
+
+### <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key)
+
+Description: The storage account primary access key.
 
 ## Resources
 
