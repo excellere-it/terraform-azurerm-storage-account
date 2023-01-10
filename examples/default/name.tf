@@ -4,7 +4,7 @@ module "name" {
 
   contact     = "nobody@dell.org"
   environment = "sbx"
-  location    = "centralus"
+  location    = local.location
   program     = "dyl"
   repository  = "terraform-azurerm-storage-account"
   workload    = "apps"

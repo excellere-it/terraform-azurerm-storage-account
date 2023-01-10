@@ -38,6 +38,14 @@ variable "optional_tags" {
   type        = map(string)
 }
 
+variable "private_endpoint" {
+  description = "The private endpoint configuration."
+  type = object({
+    subnet_id   = string
+    subresource = map(list(string))
+  })
+}
+
 variable "resource_group" {
   description = "The resource group to deploy resources into"
 

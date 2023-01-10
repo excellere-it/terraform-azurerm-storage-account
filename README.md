@@ -26,19 +26,22 @@ Creates an Azure Storage Account
 
 <!-- BEGIN_TF_DOCS -->
 
+
 ## Example
 
 ```hcl
 locals {
+  location       = "centralus"
+  tags           = module.name.tags
   test_namespace = random_pet.instance_id.id
 }
 
 resource "random_pet" "instance_id" {}
 
 resource "azurerm_resource_group" "example" {
-  location = "centralus"
+  location = local.location
   name     = "rg-${local.test_namespace}"
-  tags     = module.name.tags
+  tags     = local.tags
 }
 
 resource "azurerm_log_analytics_workspace" "example" {
@@ -47,7 +50,33 @@ resource "azurerm_log_analytics_workspace" "example" {
   resource_group_name = azurerm_resource_group.example.name
   retention_in_days   = 30
   sku                 = "PerGB2018"
-  tags                = module.name.tags
+  tags                = local.tags
+}
+
+resource "azurerm_virtual_network" "example" {
+  address_space       = ["192.168.0.0/24"]
+  location            = azurerm_resource_group.example.location
+  name                = "vnet-${local.test_namespace}"
+  resource_group_name = azurerm_resource_group.example.name
+  tags                = local.tags
+}
+
+resource "azurerm_subnet" "example" {
+  address_prefixes     = [cidrsubnet(azurerm_virtual_network.example.address_space.0, 1, 0)]
+  name                 = "storage"
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example.name
+}
+
+resource "azurerm_private_dns_zone" "example" {
+  for_each = {
+    blob = "privatelink.blob.core.windows.net"
+    file = "privatelink.file.core.windows.net"
+  }
+
+  name                = each.value
+  resource_group_name = azurerm_resource_group.example.name
+  tags                = local.tags
 }
 
 module "example" {
@@ -67,6 +96,11 @@ module "example" {
     program     = "dyl"
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
+  }
+
+  private_endpoint = {
+    subnet_id   = azurerm_subnet.example.id
+    subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
 
   shares = [
@@ -99,6 +133,19 @@ object({
     program     = optional(string)
     repository  = string
     workload    = string
+  })
+```
+
+### <a name="input_private_endpoint"></a> [private\_endpoint](#input\_private\_endpoint)
+
+Description: The private endpoint configuration.
+
+Type:
+
+```hcl
+object({
+    subnet_id   = string
+    subresource = map(list(string))
   })
 ```
 
@@ -199,13 +246,19 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.3
+Version: 0.0.5
 
 ### <a name="module_name"></a> [name](#module\_name)
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
 Version: 0.0.5
+
+### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
+
+Source: app.terraform.io/dellfoundation/private-link/azurerm
+
+Version: 0.0.1
 <!-- END_TF_DOCS -->
 
 ## Update Docs
