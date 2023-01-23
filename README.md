@@ -4,8 +4,10 @@ Creates an Azure Storage Account
 - [Azure Storage Account](#azure-storage-account)
   - [Example](#example)
   - [Required Inputs](#required-inputs)
+    - [ action\_group\_id](#-action_group_id)
     - [ log\_analytics\_workspace\_id](#-log_analytics_workspace_id)
     - [ name](#-name)
+    - [ private\_endpoint](#-private_endpoint)
     - [ resource\_group](#-resource_group)
   - [Optional Inputs](#optional-inputs)
     - [ containers](#-containers)
@@ -22,10 +24,10 @@ Creates an Azure Storage Account
   - [Modules](#modules)
     - [ diagnostics](#-diagnostics)
     - [ name](#-name-2)
+    - [ private\_endpoint](#-private_endpoint-1)
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
-
 
 ## Example
 
@@ -79,9 +81,17 @@ resource "azurerm_private_dns_zone" "example" {
   tags                = local.tags
 }
 
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "p0action"
+  tags                = local.tags
+}
+
 module "example" {
   source = "../.."
 
+  action_group_id            = azurerm_monitor_action_group.example.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
 
@@ -112,6 +122,12 @@ module "example" {
 ## Required Inputs
 
 The following input variables are required:
+
+### <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id)
+
+Description: The ID of the action group to send alerts to.
+
+Type: `string`
 
 ### <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id)
 
@@ -218,6 +234,7 @@ Description: The storage account primary access key.
 
 The following resources are used by this module:
 
+- [azurerm_monitor_metric_alert.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) (resource)
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 - [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) (resource)
 - [azurerm_storage_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_share) (resource)
@@ -229,8 +246,6 @@ The following requirements are needed by this module:
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.31)
-
-- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9)
 
 ## Providers
 

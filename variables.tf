@@ -1,3 +1,8 @@
+variable "action_group_id" {
+  description = "The ID of the action group to send alerts to."
+  type        = string
+}
+
 variable "containers" {
   default     = []
   description = "When provided the module will create private blob containers for each item in the list."

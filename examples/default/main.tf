@@ -47,9 +47,17 @@ resource "azurerm_private_dns_zone" "example" {
   tags                = local.tags
 }
 
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "p0action"
+  tags                = local.tags
+}
+
 module "example" {
   source = "../.."
 
+  action_group_id            = azurerm_monitor_action_group.example.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
 
