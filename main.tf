@@ -2,7 +2,7 @@ locals {
   alert = {
     APAT = {
       aggregation = "Average"
-      description = "Alert on Azure Database Threshold - Account availability less than 98% for 5 minutes"
+      description = "Alert on Storage Account Threshold - Account availability less than 98% for 5 minutes"
       frequency   = "PT1M"
       metric_name = "Availability"
       operator    = "LessThan"
@@ -29,7 +29,7 @@ module "name" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  account_replication_type          = "ZRS"
+  account_replication_type          = "RAGZRS"
   account_tier                      = "Standard"
   allow_nested_items_to_be_public   = false
   enable_https_traffic_only         = true
@@ -37,6 +37,7 @@ resource "azurerm_storage_account" "sa" {
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
   name                              = "sa${module.name.resource_suffix_short_compact}"
+  public_network_access_enabled     = false
   resource_group_name               = var.resource_group.name
   tags                              = module.name.tags
 
@@ -52,9 +53,7 @@ resource "azurerm_storage_account" "sa" {
 
   network_rules {
     bypass                     = ["AzureServices", "Logging", "Metrics"]
-    default_action             = "Allow"
-    ip_rules                   = []
-    virtual_network_subnet_ids = []
+    default_action             = "Deny"
   }
 }
 
