@@ -37,7 +37,7 @@ resource "azurerm_storage_account" "sa" {
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
   name                              = "sa${module.name.resource_suffix_short_compact}"
-  public_network_access_enabled     = false
+  public_network_access_enabled     = var.testing
   resource_group_name               = var.resource_group.name
   tags                              = module.name.tags
 
@@ -52,8 +52,8 @@ resource "azurerm_storage_account" "sa" {
   }
 
   network_rules {
-    bypass                     = ["AzureServices", "Logging", "Metrics"]
-    default_action             = "Deny"
+    bypass         = ["AzureServices", "Logging", "Metrics"]
+    default_action = var.testing ? "Allow" : "Deny"
   }
 }
 
@@ -76,7 +76,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.5"
+  version = "0.0.7"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 

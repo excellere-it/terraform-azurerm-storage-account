@@ -65,3 +65,9 @@ variable "shares" {
   description = "When provided the module will create file shares for each item in the list."
   type        = list(string)
 }
+
+variable "testing" {
+  default     = false
+  description = "When true the module will use the testing options; for example public access will be enabled."
+  type        = bool
+}

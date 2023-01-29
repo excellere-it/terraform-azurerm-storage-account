@@ -29,6 +29,7 @@ Creates an Azure Storage Account
 
 <!-- BEGIN_TF_DOCS -->
 
+
 ## Example
 
 ```hcl
@@ -94,6 +95,7 @@ module "example" {
   action_group_id            = azurerm_monitor_action_group.example.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
+  testing                    = true
 
   containers = [
     "sqlreports"
@@ -214,6 +216,14 @@ Type: `list(string)`
 
 Default: `[]`
 
+### <a name="input_testing"></a> [testing](#input\_testing)
+
+Description: When true the module will use the testing options; for example public access will be enabled.
+
+Type: `bool`
+
+Default: `false`
+
 ## Outputs
 
 The following outputs are exported:
@@ -261,7 +271,7 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.5
+Version: 0.0.7
 
 ### <a name="module_name"></a> [name](#module\_name)
 
