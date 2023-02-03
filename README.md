@@ -14,6 +14,7 @@ Creates an Azure Storage Account
     - [ expiration\_days](#-expiration_days)
     - [ optional\_tags](#-optional_tags)
     - [ shares](#-shares)
+    - [ testing](#-testing)
   - [Outputs](#outputs)
     - [ id](#-id)
     - [ name](#-name-1)
@@ -28,7 +29,6 @@ Creates an Azure Storage Account
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
-
 
 ## Example
 
@@ -255,13 +255,13 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.31)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.41)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.31)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.41)
 
 ## Modules
 
@@ -271,7 +271,7 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.7
+Version: 0.0.8
 
 ### <a name="module_name"></a> [name](#module\_name)
 

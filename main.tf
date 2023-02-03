@@ -58,7 +58,8 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_container" "container" {
-  for_each = toset(var.containers)
+  depends_on = [module.private_endpoint]
+  for_each   = toset(var.containers)
 
   name                  = each.key
   storage_account_name  = azurerm_storage_account.sa.name
@@ -66,7 +67,8 @@ resource "azurerm_storage_container" "container" {
 }
 
 resource "azurerm_storage_share" "share" {
-  for_each = toset(var.shares)
+  depends_on = [module.private_endpoint]
+  for_each   = toset(var.shares)
 
   enabled_protocol     = "SMB"
   name                 = each.key
@@ -76,7 +78,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.7"
+  version = "0.0.8"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
