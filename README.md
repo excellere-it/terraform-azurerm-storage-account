@@ -30,6 +30,7 @@ Creates an Azure Storage Account
 
 <!-- BEGIN_TF_DOCS -->
 
+
 ## Example
 
 ```hcl
