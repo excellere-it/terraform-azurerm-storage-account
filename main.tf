@@ -78,7 +78,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.8"
+  version = "0.0.9"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
