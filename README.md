@@ -278,7 +278,7 @@ Version: 0.0.9
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.5
+Version: 0.0.6
 
 ### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
 
