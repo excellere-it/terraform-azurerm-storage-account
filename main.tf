@@ -15,7 +15,7 @@ locals {
 
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.6"
+  version = "0.0.7"
 
   contact         = var.name.contact
   environment     = var.name.environment
@@ -78,7 +78,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.9"
+  version = "0.0.10"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
@@ -96,7 +96,7 @@ module "diagnostics" {
 
 module "private_endpoint" {
   source  = "app.terraform.io/dellfoundation/private-link/azurerm"
-  version = "0.0.1"
+  version = "0.0.3"
 
   resource_group  = var.resource_group
   resource_id     = azurerm_storage_account.sa.id

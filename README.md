@@ -254,7 +254,7 @@ The following resources are used by this module:
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.41)
 
@@ -272,19 +272,19 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.9
+Version: 0.0.10
 
 ### <a name="module_name"></a> [name](#module\_name)
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.6
+Version: 0.0.7
 
 ### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
 
 Source: app.terraform.io/dellfoundation/private-link/azurerm
 
-Version: 0.0.1
+Version: 0.0.3
 <!-- END_TF_DOCS -->
 
 ## Update Docs

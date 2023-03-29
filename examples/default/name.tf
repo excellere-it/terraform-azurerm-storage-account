@@ -1,6 +1,6 @@
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.6"
+  version = "0.0.7"
 
   contact     = "nobody@dell.org"
   environment = "sbx"
