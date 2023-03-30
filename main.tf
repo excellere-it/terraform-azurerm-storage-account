@@ -29,7 +29,7 @@ module "name" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  account_replication_type          = "RAGZRS"
+  account_replication_type          = "RAGRS"
   account_tier                      = "Standard"
   allow_nested_items_to_be_public   = false
   enable_https_traffic_only         = true
