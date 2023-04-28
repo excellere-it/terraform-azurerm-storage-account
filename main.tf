@@ -13,19 +13,29 @@ locals {
   }
 }
 
-module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.7"
+resource "azurerm_monitor_metric_alert" "alert" {
+  for_each = local.alert
 
-  contact         = var.name.contact
-  environment     = var.name.environment
-  expiration_days = var.expiration_days
-  instance        = var.name.instance
-  location        = var.resource_group.location
-  optional_tags   = var.optional_tags
-  program         = var.name.program
-  repository      = var.name.repository
-  workload        = var.name.workload
+  description         = each.value.description
+  frequency           = each.value.frequency
+  name                = "alert-sa-${each.key}-${module.name.resource_suffix}"
+  resource_group_name = var.resource_group.name
+  scopes              = [azurerm_storage_account.sa.id]
+  severity            = each.value.severity
+  tags                = module.name.tags
+  window_size         = each.value.window_size
+
+  action {
+    action_group_id = var.action_group_id
+  }
+
+  criteria {
+    aggregation      = each.value.aggregation
+    metric_name      = each.value.metric_name
+    metric_namespace = "Microsoft.Storage/storageaccounts"
+    operator         = each.value.operator
+    threshold        = each.value.threshold
+  }
 }
 
 resource "azurerm_storage_account" "sa" {
@@ -94,6 +104,21 @@ module "diagnostics" {
   }
 }
 
+module "name" {
+  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  version = "0.0.7"
+
+  contact         = var.name.contact
+  environment     = var.name.environment
+  expiration_days = var.expiration_days
+  instance        = var.name.instance
+  location        = var.resource_group.location
+  optional_tags   = var.optional_tags
+  program         = var.name.program
+  repository      = var.name.repository
+  workload        = var.name.workload
+}
+
 module "private_endpoint" {
   source  = "app.terraform.io/dellfoundation/private-link/azurerm"
   version = "0.0.3"
@@ -104,29 +129,4 @@ module "private_endpoint" {
   subnet_id       = var.private_endpoint.subnet_id
   subresource     = var.private_endpoint.subresource
   tags            = module.name.tags
-}
-
-resource "azurerm_monitor_metric_alert" "alert" {
-  for_each = local.alert
-
-  description         = each.value.description
-  frequency           = each.value.frequency
-  name                = "alert-sa-${each.key}-${module.name.resource_suffix}"
-  resource_group_name = var.resource_group.name
-  scopes              = [azurerm_storage_account.sa.id]
-  severity            = each.value.severity
-  tags                = module.name.tags
-  window_size         = each.value.window_size
-
-  action {
-    action_group_id = var.action_group_id
-  }
-
-  criteria {
-    aggregation      = each.value.aggregation
-    metric_name      = each.value.metric_name
-    metric_namespace = "Microsoft.Storage/storageaccounts"
-    operator         = each.value.operator
-    threshold        = each.value.threshold
-  }
 }
