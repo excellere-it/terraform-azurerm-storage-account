@@ -40,14 +40,6 @@ locals {
   test_namespace = random_pet.instance_id.id
 }
 
-resource "random_pet" "instance_id" {}
-
-resource "azurerm_resource_group" "example" {
-  location = local.location
-  name     = "rg-${local.test_namespace}"
-  tags     = local.tags
-}
-
 resource "azurerm_log_analytics_workspace" "example" {
   location            = azurerm_resource_group.example.location
   name                = "la-${local.test_namespace}"
@@ -56,6 +48,21 @@ resource "azurerm_log_analytics_workspace" "example" {
   sku                 = "PerGB2018"
   tags                = local.tags
 }
+
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "p0action"
+  tags                = local.tags
+}
+
+resource "azurerm_resource_group" "example" {
+  location = local.location
+  name     = "rg-${local.test_namespace}"
+  tags     = local.tags
+}
+
+
 
 resource "azurerm_virtual_network" "example" {
   address_space       = ["192.168.0.0/24"]
@@ -83,12 +90,8 @@ resource "azurerm_private_dns_zone" "example" {
   tags                = local.tags
 }
 
-resource "azurerm_monitor_action_group" "example" {
-  name                = "CriticalAlertsAction"
-  resource_group_name = azurerm_resource_group.example.name
-  short_name          = "p0action"
-  tags                = local.tags
-}
+
+resource "random_pet" "instance_id" {}
 
 module "example" {
   source = "../.."
@@ -155,19 +158,6 @@ object({
   })
 ```
 
-### <a name="input_private_endpoint"></a> [private\_endpoint](#input\_private\_endpoint)
-
-Description: The private endpoint configuration.
-
-Type:
-
-```hcl
-object({
-    subnet_id   = string
-    subresource = map(list(string))
-  })
-```
-
 ### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
 
 Description: The resource group to deploy resources into
@@ -208,6 +198,28 @@ Description: A map of additional tags for the resource.
 Type: `map(string)`
 
 Default: `{}`
+
+### <a name="input_private_endpoint"></a> [private\_endpoint](#input\_private\_endpoint)
+
+Description: The private endpoint configuration.
+
+Type:
+
+```hcl
+object({
+    enabled     = bool
+    subnet_id   = optional(string)
+    subresource = optional(map(list(string)))
+  })
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
 
 ### <a name="input_shares"></a> [shares](#input\_shares)
 
@@ -284,7 +296,7 @@ Version: 0.0.7
 
 Source: app.terraform.io/dellfoundation/private-link/azurerm
 
-Version: 0.0.3
+Version: 0.0.4
 <!-- END_TF_DOCS -->
 
 ## Update Docs

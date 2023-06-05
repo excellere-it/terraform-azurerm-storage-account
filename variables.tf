@@ -45,10 +45,26 @@ variable "optional_tags" {
 
 variable "private_endpoint" {
   description = "The private endpoint configuration."
+
+  default = {
+    enabled = false
+  }
+
   type = object({
-    subnet_id   = string
-    subresource = map(list(string))
+    enabled     = bool
+    subnet_id   = optional(string)
+    subresource = optional(map(list(string)))
   })
+
+  validation {
+    condition     = var.private_endpoint.enabled == false || var.private_endpoint.subnet_id != null
+    error_message = "The private_endpoint.subnet_id variable must be set when private_endpoint.enabled is true."
+  }
+
+  validation {
+    condition     = var.private_endpoint.enabled == false || var.private_endpoint.subresource != null
+    error_message = "The private_endpoint.subresource variable must be set when private_endpoint.enabled is true."
+  }
 }
 
 variable "resource_group" {

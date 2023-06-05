@@ -1,6 +1,7 @@
 default: test
 
 testdir := ./test
+example ?= default
 
 docs:
 	terraform-docs markdown document --output-file README.md --output-mode inject .
@@ -22,12 +23,12 @@ test: tidy fmt docs
 
 # Example: make upgrade
 upgrade: fmt docs
-	cd ./examples/default && terraform init -upgrade
+	cd ./examples/$(example) && terraform init -upgrade
 	
 # Example: make deploy
 deploy: fmt docs
-	cd ./examples/default && terraform apply
+	cd ./examples/$(example) && terraform apply
 
 # Example: make destroy
 destroy: fmt docs
-	cd ./examples/default && terraform destroy
+	cd ./examples/$(example) && terraform destroy

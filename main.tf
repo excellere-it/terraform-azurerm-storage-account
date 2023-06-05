@@ -1,4 +1,6 @@
 locals {
+  subresource = var.private_endpoint.enabled ? var.private_endpoint.subresource : {}
+
   alert = {
     APAT = {
       aggregation = "Average"
@@ -121,12 +123,12 @@ module "name" {
 
 module "private_endpoint" {
   source  = "app.terraform.io/dellfoundation/private-link/azurerm"
-  version = "0.0.3"
+  version = "0.0.4"
 
   resource_group  = var.resource_group
   resource_id     = azurerm_storage_account.sa.id
   resource_prefix = azurerm_storage_account.sa.name
   subnet_id       = var.private_endpoint.subnet_id
-  subresource     = var.private_endpoint.subresource
+  subresource     = local.subresource
   tags            = module.name.tags
 }
