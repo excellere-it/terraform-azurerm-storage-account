@@ -1,8 +1,16 @@
 locals {
+  cloudflare_ips = data.cloudflare_ip_ranges.cloudflare.ipv4_cidr_blocks
   location       = "centralus"
   tags           = module.name.tags
   test_namespace = random_pet.instance_id.id
+
+  ip_restriction = { for v in local.cloudflare_ips : "Cloudflare${index(local.cloudflare_ips, v)}" => {
+    ip_address = v
+    name       = "Cloudflare${index(local.cloudflare_ips, v)}"
+  } }
 }
+
+data "cloudflare_ip_ranges" "cloudflare" {}
 
 resource "azurerm_log_analytics_workspace" "example" {
   location            = azurerm_resource_group.example.location
@@ -35,11 +43,16 @@ module "example" {
   action_group_id            = azurerm_monitor_action_group.example.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
   resource_group             = azurerm_resource_group.example
-  testing                    = false
+  testing                    = true
 
   containers = [
     "sqlreports"
   ]
+
+  ip_restriction = {
+    enabled = true
+    ip      = local.ip_restriction
+  }
 
   name = {
     contact     = "nobody@dell.org"

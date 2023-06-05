@@ -62,8 +62,6 @@ resource "azurerm_resource_group" "example" {
   tags     = local.tags
 }
 
-
-
 resource "azurerm_virtual_network" "example" {
   address_space       = ["192.168.0.0/24"]
   location            = azurerm_resource_group.example.location
@@ -115,6 +113,7 @@ module "example" {
   }
 
   private_endpoint = {
+    enabled     = true
     subnet_id   = azurerm_subnet.example.id
     subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
@@ -190,6 +189,30 @@ Description: Used to calculate the value of the EndDate tag by adding the specif
 Type: `number`
 
 Default: `365`
+
+### <a name="input_ip_restriction"></a> [ip\_restriction](#input\_ip\_restriction)
+
+Description: The IP restriction configuration.
+
+Type:
+
+```hcl
+object({
+    enabled = bool
+    ip = optional(map(object({
+      ip_address = string
+      name       = string
+    })))
+  })
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
 
 ### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
 

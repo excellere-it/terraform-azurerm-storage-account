@@ -1,5 +1,7 @@
 locals {
-  subresource = var.private_endpoint.enabled ? var.private_endpoint.subresource : {}
+  public_network_access_enabled = var.testing || var.ip_restriction.enabled
+  subresource                   = var.private_endpoint.enabled ? var.private_endpoint.subresource : {}
+  ip_rules                      = var.ip_restriction.enabled ? [for _, v in var.ip_restriction.ip : v.ip_address] : []
 
   alert = {
     APAT = {
@@ -49,7 +51,7 @@ resource "azurerm_storage_account" "sa" {
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
   name                              = "sa${module.name.resource_suffix_short_compact}"
-  public_network_access_enabled     = var.testing
+  public_network_access_enabled     = local.public_network_access_enabled
   resource_group_name               = var.resource_group.name
   tags                              = module.name.tags
 
@@ -66,6 +68,7 @@ resource "azurerm_storage_account" "sa" {
   network_rules {
     bypass         = ["AzureServices", "Logging", "Metrics"]
     default_action = var.testing ? "Allow" : "Deny"
+    ip_rules       = local.ip_rules
   }
 }
 

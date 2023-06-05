@@ -20,6 +20,32 @@ variable "expiration_days" {
   }
 }
 
+variable "log_analytics_workspace_id" {
+  description = "The workspace to write logs into."
+  type        = string
+}
+
+variable "ip_restriction" {
+  description = "The IP restriction configuration."
+
+  default = {
+    enabled = false
+  }
+
+  type = object({
+    enabled = bool
+    ip = optional(map(object({
+      ip_address = string
+      name       = string
+    })))
+  })
+
+  validation {
+    condition     = var.ip_restriction.enabled == false || var.ip_restriction.ip != null
+    error_message = "The ip_restriction.ip variable must be set when ip_restriction.enabled is true."
+  }
+}
+
 variable "name" {
   description = "The name tokens used to construct the resource name and tags."
   type = object({
@@ -30,11 +56,6 @@ variable "name" {
     repository  = string
     workload    = string
   })
-}
-
-variable "log_analytics_workspace_id" {
-  description = "The workspace to write logs into."
-  type        = string
 }
 
 variable "optional_tags" {

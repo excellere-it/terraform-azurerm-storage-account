@@ -26,8 +26,6 @@ resource "azurerm_resource_group" "example" {
   tags     = local.tags
 }
 
-
-
 resource "azurerm_virtual_network" "example" {
   address_space       = ["192.168.0.0/24"]
   location            = azurerm_resource_group.example.location
@@ -79,6 +77,7 @@ module "example" {
   }
 
   private_endpoint = {
+    enabled     = true
     subnet_id   = azurerm_subnet.example.id
     subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
