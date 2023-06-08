@@ -13,3 +13,9 @@ output "primary_access_key" {
   sensitive   = true
   value       = azurerm_storage_account.sa.primary_access_key
 }
+
+output "primary_connection_string" {
+  description = "The storage account primary connection string."
+  sensitive   = true
+  value       = azurerm_storage_account.sa.primary_connection_string
+}
