@@ -264,6 +264,10 @@ Default: `false`
 
 The following outputs are exported:
 
+### <a name="output_containers"></a> [containers](#output\_containers)
+
+Description: The storage account containers.
+
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: Storage Account ID.
@@ -275,6 +279,14 @@ Description: The storage account name.
 ### <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key)
 
 Description: The storage account primary access key.
+
+### <a name="output_primary_blob_endpoint"></a> [primary\_blob\_endpoint](#output\_primary\_blob\_endpoint)
+
+Description: The storage account primary blob endpoint.
+
+### <a name="output_primary_connection_string"></a> [primary\_connection\_string](#output\_primary\_connection\_string)
+
+Description: The storage account primary connection string.
 
 ## Resources
 
