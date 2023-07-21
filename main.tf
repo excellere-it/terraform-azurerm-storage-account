@@ -43,7 +43,7 @@ resource "azurerm_monitor_metric_alert" "alert" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  account_replication_type          = "RAGZRS"
+  account_replication_type          = var.sku
   account_tier                      = "Standard"
   allow_nested_items_to_be_public   = false
   enable_https_traffic_only         = true

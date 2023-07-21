@@ -107,4 +107,10 @@ variable "testing" {
   default     = false
   description = "When true the module will use the testing options; for example public access will be enabled."
   type        = bool
+
+}
+variable "sku" {
+default     = "RAGZRS"
+description = "The SKU to use for the storage account."
+type        = string
 }
