@@ -82,7 +82,10 @@ module "example" {
     subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
 
-  shares = [
-    "university-success"
-  ]
+  shares = {
+    university-success = {},
+    dell-scholars = {
+      quota = 100
+    }
+  }
 }

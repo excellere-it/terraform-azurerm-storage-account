@@ -118,9 +118,12 @@ module "example" {
     subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
 
-  shares = [
-    "university-success"
-  ]
+  shares = {
+    university-success = {},
+    dell-scholars = {
+      quota = 100
+    }
+  }
 }
 ```
 
@@ -246,11 +249,25 @@ Default:
 
 ### <a name="input_shares"></a> [shares](#input\_shares)
 
-Description: When provided the module will create file shares for each item in the list.
+Description: When provided the module will create file shares for each item in the list with optional quota.
 
-Type: `list(string)`
+Type:
 
-Default: `[]`
+```hcl
+map(object({
+    quota = optional(number)
+  }))
+```
+
+Default: `{}`
+
+### <a name="input_sku"></a> [sku](#input\_sku)
+
+Description: The SKU to use for the storage account.
+
+Type: `string`
+
+Default: `"RAGZRS"`
 
 ### <a name="input_testing"></a> [testing](#input\_testing)
 
@@ -325,7 +342,7 @@ Version: 0.0.10
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.7
+Version: 0.0.8
 
 ### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
 

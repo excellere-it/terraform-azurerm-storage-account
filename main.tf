@@ -83,11 +83,11 @@ resource "azurerm_storage_container" "container" {
 
 resource "azurerm_storage_share" "share" {
   depends_on = [module.private_endpoint]
-  for_each   = toset(var.shares)
+  for_each   = var.shares
 
   enabled_protocol     = "SMB"
   name                 = each.key
-  quota                = 50
+  quota                = coalesce(each.value.quota, 50)
   storage_account_name = azurerm_storage_account.sa.name
 }
 
