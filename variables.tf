@@ -98,9 +98,11 @@ variable "resource_group" {
 }
 
 variable "shares" {
-  default     = []
-  description = "When provided the module will create file shares for each item in the list."
-  type        = list(string)
+  default     = {}
+  description = "When provided the module will create file shares for each item in the list with optional quota."
+  type = map(object({
+    quota = optional(number)
+  }))
 }
 
 variable "testing" {
@@ -110,7 +112,7 @@ variable "testing" {
 
 }
 variable "sku" {
-default     = "RAGZRS"
-description = "The SKU to use for the storage account."
-type        = string
+  default     = "RAGZRS"
+  description = "The SKU to use for the storage account."
+  type        = string
 }
