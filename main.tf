@@ -135,3 +135,18 @@ module "private_endpoint" {
   subresource     = local.subresource
   tags            = module.name.tags
 }
+
+resource "azurerm_backup_protected_file_share" "share" {
+  for_each                  = azurerm_storage_share.share
+  resource_group_name       = var.resource_group.name
+  recovery_vault_name       = var.recovery_vault_name
+  source_storage_account_id = azurerm_backup_container_storage_account.protection_container.storage_account_id
+  source_file_share_name    = each.value.name
+  backup_policy_id          = var.backup_policy_id
+}
+
+resource "azurerm_backup_container_storage_account" "protection_container" {
+  resource_group_name = var.resource_group.name
+  recovery_vault_name = var.recovery_vault_name
+  storage_account_id  = azurerm_storage_account.sa.id
+}

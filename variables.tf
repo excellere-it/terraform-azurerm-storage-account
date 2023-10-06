@@ -3,6 +3,11 @@ variable "action_group_id" {
   type        = string
 }
 
+variable "backup_policy_id" {
+  description = "Backup Policy ID"
+  type = string
+}
+
 variable "containers" {
   default     = []
   description = "When provided the module will create private blob containers for each item in the list."
@@ -88,6 +93,12 @@ variable "private_endpoint" {
   }
 }
 
+variable "recovery_vault_name" {
+  description = "Recovery Vault Name"
+  type = string
+  
+}
+
 variable "resource_group" {
   description = "The resource group to deploy resources into"
 
@@ -105,14 +116,15 @@ variable "shares" {
   }))
 }
 
+variable "sku" {
+  default     = "RAGZRS"
+  description = "The SKU to use for the storage account."
+  type        = string
+}
+
 variable "testing" {
   default     = false
   description = "When true the module will use the testing options; for example public access will be enabled."
   type        = bool
 
-}
-variable "sku" {
-  default     = "RAGZRS"
-  description = "The SKU to use for the storage account."
-  type        = string
 }
