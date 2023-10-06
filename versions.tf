@@ -5,6 +5,7 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 3.41"
+      configuration_aliases = [ azurerm.ops ]
     }
   }
 }

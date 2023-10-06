@@ -93,9 +93,12 @@ variable "private_endpoint" {
   }
 }
 
-variable "recovery_vault_name" {
-  description = "Recovery Vault Name"
-  type = string
+variable "recovery_vault" {
+  description = "recovery vault"
+  type = object({
+    resource_group_name = string
+    name                = string
+  })
   
 }
 
