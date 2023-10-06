@@ -36,6 +36,48 @@ resource "azurerm_resource_group" "example" {
 
 resource "random_pet" "instance_id" {}
 
+resource "azurerm_recovery_services_vault" "example" {
+  name                = "tfex-recovery-vault"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku                 = "Standard"
+  tags                = local.tags
+}
+
+resource "azurerm_backup_policy_file_share" "example" {
+  name                = "tfex-recovery-vault-policy"
+  resource_group_name = azurerm_resource_group.example.name
+  recovery_vault_name = azurerm_recovery_services_vault.example.name
+
+  timezone = "UTC"
+
+  backup {
+    frequency = "Daily"
+    time      = "23:00"
+  }
+
+  retention_daily {
+    count = 10
+  }
+
+  retention_weekly {
+    count    = 7
+    weekdays = ["Sunday", "Wednesday", "Friday", "Saturday"]
+  }
+
+  retention_monthly {
+    count    = 7
+    weekdays = ["Sunday", "Wednesday"]
+    weeks    = ["First", "Last"]
+  }
+
+  retention_yearly {
+    count    = 7
+    weekdays = ["Sunday"]
+    weeks    = ["Last"]
+    months   = ["January"]
+  }
+}
 
 module "example" {
   source = "../.."
@@ -70,4 +112,7 @@ module "example" {
   shares = [
     "university-success"
   ]
+
+  backup_policy_id = azurerm_backup_policy_file_share.example.id
+  recovery_vault = azurerm_recovery_services_vault.example.name
 }

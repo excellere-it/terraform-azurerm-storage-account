@@ -51,7 +51,7 @@ resource "azurerm_storage_account" "sa" {
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
   name                              = "sa${module.name.resource_suffix_short_compact}"
-  public_network_access_enabled     = local.public_network_access_enabled
+  public_network_access_enabled     = true
   resource_group_name               = var.resource_group.name
   tags                              = module.name.tags
 
