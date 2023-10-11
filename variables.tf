@@ -5,7 +5,7 @@ variable "action_group_id" {
 
 variable "backup_policy_id" {
   description = "Backup Policy ID"
-  type = string
+  type        = string
 }
 
 variable "containers" {
@@ -99,7 +99,7 @@ variable "recovery_vault" {
     resource_group_name = string
     name                = string
   })
-  
+
 }
 
 variable "resource_group" {

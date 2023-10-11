@@ -113,7 +113,7 @@ module "example" {
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"
-    instance    = 0
+    instance    = 1303
     program     = "dyl"
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
@@ -133,5 +133,8 @@ module "example" {
   }
 
   backup_policy_id = azurerm_backup_policy_file_share.example.id
-  recovery_vault = azurerm_recovery_services_vault.example.name
+  recovery_vault = {
+    name                = azurerm_recovery_services_vault.example.name
+    resource_group_name = azurerm_resource_group.example.name
+  }
 }

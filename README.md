@@ -91,6 +91,49 @@ resource "azurerm_private_dns_zone" "example" {
 
 resource "random_pet" "instance_id" {}
 
+resource "azurerm_recovery_services_vault" "example" {
+  name                = "tfex-recovery-vault"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  sku                 = "Standard"
+  tags                = local.tags
+}
+
+resource "azurerm_backup_policy_file_share" "example" {
+  name                = "tfex-recovery-vault-policy"
+  resource_group_name = azurerm_resource_group.example.name
+  recovery_vault_name = azurerm_recovery_services_vault.example.name
+
+  timezone = "UTC"
+
+  backup {
+    frequency = "Daily"
+    time      = "23:00"
+  }
+
+  retention_daily {
+    count = 10
+  }
+
+  retention_weekly {
+    count    = 7
+    weekdays = ["Sunday", "Wednesday", "Friday", "Saturday"]
+  }
+
+  retention_monthly {
+    count    = 7
+    weekdays = ["Sunday", "Wednesday"]
+    weeks    = ["First", "Last"]
+  }
+
+  retention_yearly {
+    count    = 7
+    weekdays = ["Sunday"]
+    weeks    = ["Last"]
+    months   = ["January"]
+  }
+}
+
 module "example" {
   source = "../.."
 
@@ -106,7 +149,7 @@ module "example" {
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"
-    instance    = 0
+    instance    = 1303
     program     = "dyl"
     repository  = "terraform-azurerm-storage-account"
     workload    = "apps"
@@ -124,6 +167,12 @@ module "example" {
       quota = 100
     }
   }
+
+  backup_policy_id = azurerm_backup_policy_file_share.example.id
+  recovery_vault = {
+    name                = azurerm_recovery_services_vault.example.name
+    resource_group_name = azurerm_resource_group.example.name
+  }
 }
 ```
 
@@ -134,6 +183,12 @@ The following input variables are required:
 ### <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id)
 
 Description: The ID of the action group to send alerts to.
+
+Type: `string`
+
+### <a name="input_backup_policy_id"></a> [backup\_policy\_id](#input\_backup\_policy\_id)
+
+Description: Backup Policy ID
 
 Type: `string`
 
@@ -157,6 +212,19 @@ object({
     program     = optional(string)
     repository  = string
     workload    = string
+  })
+```
+
+### <a name="input_recovery_vault"></a> [recovery\_vault](#input\_recovery\_vault)
+
+Description: recovery vault
+
+Type:
+
+```hcl
+object({
+    resource_group_name = string
+    name                = string
   })
 ```
 
@@ -309,6 +377,8 @@ Description: The storage account primary connection string.
 
 The following resources are used by this module:
 
+- [azurerm_backup_container_storage_account.protection_container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_container_storage_account) (resource)
+- [azurerm_backup_protected_file_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_protected_file_share) (resource)
 - [azurerm_monitor_metric_alert.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) (resource)
 - [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 - [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) (resource)
@@ -318,7 +388,7 @@ The following resources are used by this module:
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.41)
 
@@ -336,13 +406,13 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.10
+Version: ~> 0.0
 
 ### <a name="module_name"></a> [name](#module\_name)
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.8
+Version: ~> 0.0
 
 ### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
 

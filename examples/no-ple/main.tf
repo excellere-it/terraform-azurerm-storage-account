@@ -114,5 +114,5 @@ module "example" {
   ]
 
   backup_policy_id = azurerm_backup_policy_file_share.example.id
-  recovery_vault = azurerm_recovery_services_vault.example.name
+  recovery_vault   = azurerm_recovery_services_vault.example.name
 }

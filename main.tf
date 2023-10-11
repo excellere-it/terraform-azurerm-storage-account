@@ -61,6 +61,10 @@ resource "azurerm_storage_account" "sa" {
     versioning_enabled = true
   }
 
+  share_properties {
+    retention_policy { days = 30 }
+  }
+
   identity {
     type = "SystemAssigned"
   }
@@ -138,7 +142,6 @@ module "private_endpoint" {
 
 resource "azurerm_backup_protected_file_share" "share" {
   for_each                  = azurerm_storage_share.share
-  provider                  = azurerm.ops
   resource_group_name       = var.recovery_vault.resource_group_name
   recovery_vault_name       = var.recovery_vault.name
   source_storage_account_id = azurerm_backup_container_storage_account.protection_container.storage_account_id
@@ -147,7 +150,6 @@ resource "azurerm_backup_protected_file_share" "share" {
 }
 
 resource "azurerm_backup_container_storage_account" "protection_container" {
-  provider            = azurerm.ops
   resource_group_name = var.recovery_vault.resource_group_name
   recovery_vault_name = var.recovery_vault.name
   storage_account_id  = azurerm_storage_account.sa.id
