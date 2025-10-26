@@ -95,9 +95,8 @@ resource "azurerm_storage_share" "share" {
   storage_account_name = azurerm_storage_account.sa.name
 }
 
-module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "~> 0.0"
+  version = "0.0.1"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
@@ -113,9 +112,8 @@ module "diagnostics" {
   }
 }
 
-module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "~> 0.0"
+  version = "0.0.1"
 
   contact         = var.name.contact
   environment     = var.name.environment
@@ -128,9 +126,8 @@ module "name" {
   workload        = var.name.workload
 }
 
-module "private_endpoint" {
   source  = "app.terraform.io/infoex/private-link/azurerm"
-  version = "0.0.4"
+  version = "0.0.1"
 
   resource_group  = var.resource_group
   resource_id     = azurerm_storage_account.sa.id
