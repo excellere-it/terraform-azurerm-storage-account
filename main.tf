@@ -95,6 +95,7 @@ resource "azurerm_storage_share" "share" {
   storage_account_name = azurerm_storage_account.sa.name
 }
 
+module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
   version = "0.0.1"
 
@@ -112,6 +113,7 @@ resource "azurerm_storage_share" "share" {
   }
 }
 
+module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
   version = "0.0.1"
 
@@ -126,6 +128,7 @@ resource "azurerm_storage_share" "share" {
   workload        = var.name.workload
 }
 
+module "private_endpoint" {
   source  = "app.terraform.io/infoex/private-link/azurerm"
   version = "0.0.1"
 
