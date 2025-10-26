@@ -1,4 +1,4 @@
-module github.com/msdf/terraform-azurerm-storage-account
+module github.com/infoex/terraform-azurerm-storage-account
 
 go 1.18
 

@@ -96,7 +96,7 @@ resource "azurerm_storage_share" "share" {
 }
 
 module "diagnostics" {
-  source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
+  source  = "app.terraform.io/infoex/diagnostics/azurerm"
   version = "~> 0.0"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
@@ -114,7 +114,7 @@ module "diagnostics" {
 }
 
 module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  source  = "app.terraform.io/infoex/namer/terraform"
   version = "~> 0.0"
 
   contact         = var.name.contact
@@ -129,7 +129,7 @@ module "name" {
 }
 
 module "private_endpoint" {
-  source  = "app.terraform.io/dellfoundation/private-link/azurerm"
+  source  = "app.terraform.io/infoex/private-link/azurerm"
   version = "0.0.4"
 
   resource_group  = var.resource_group

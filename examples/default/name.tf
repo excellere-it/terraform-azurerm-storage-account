@@ -1,5 +1,5 @@
 module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  source  = "app.terraform.io/infoex/namer/terraform"
   version = "~> 0.0"
 
   contact     = "nobody@dell.org"

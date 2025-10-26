@@ -404,19 +404,19 @@ The following Modules are called:
 
 ### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
 
-Source: app.terraform.io/dellfoundation/diagnostics/azurerm
+Source: app.terraform.io/infoex/diagnostics/azurerm
 
 Version: ~> 0.0
 
 ### <a name="module_name"></a> [name](#module\_name)
 
-Source: app.terraform.io/dellfoundation/namer/terraform
+Source: app.terraform.io/infoex/namer/terraform
 
 Version: ~> 0.0
 
 ### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
 
-Source: app.terraform.io/dellfoundation/private-link/azurerm
+Source: app.terraform.io/infoex/private-link/azurerm
 
 Version: 0.0.4
 <!-- END_TF_DOCS -->
