@@ -147,7 +147,7 @@ module "example" {
   ]
 
   name = {
-    contact     = "nobody@dell.org"
+    contact     = "nobody@infoex.dev"
     environment = "sbx"
     instance    = 1303
     program     = "dyl"
