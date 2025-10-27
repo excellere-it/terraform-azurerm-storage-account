@@ -115,13 +115,13 @@ module "diagnostics" {
 
 module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.1"
+  version = "0.0.3"
 
   contact         = var.name.contact
   environment     = var.name.environment
   expiration_days = var.expiration_days
   instance        = var.name.instance
-  location        = var.resource_group.location
+  location        = var.is_global ? "global" : var.resource_group.location
   optional_tags   = var.optional_tags
   program         = var.name.program
   repository      = var.name.repository
