@@ -26,7 +26,7 @@ provider "registry.terraform.io/cloudflare/cloudflare" {
 
 provider "registry.terraform.io/hashicorp/azurerm" {
   version     = "3.59.0"
-  constraints = "~> 3.41"
+  constraints = "~> 3.47"
   hashes = [
     "h1:8UJs2VdZ6Zr2bYzyBWl9m5PeG8B8goIfNQXNcVrXJYg=",
     "zh:07a560ad97faa351fcc484badfa796a5513dd7065cd4cc125f47b1baf1183624",
