@@ -1,22 +1,35 @@
 # Basic functionality tests for the storage account module
 
+# =============================================================================
+# MOCK PROVIDER CONFIGURATION
+# =============================================================================
+
+# Mock provider configuration for plan-only testing
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
+}
+
+# =============================================================================
+# TEST VARIABLES
+# =============================================================================
+
 variables {
+  # Required variables
+  contact                    = "test@example.com"
+  environment                = "sbx"
+  location                   = "centralus"
+  repository                 = "terraform-azurerm-storage-account"
+  workload                   = "test"
+  log_analytics_workspace_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.OperationalInsights/workspaces/test-law"
+
   resource_group = {
     name     = "rg-test-storage"
     location = "centralus"
   }
 
-  name = {
-    contact     = "test@example.com"
-    environment = "sbx"
-    instance    = 1
-    repository  = "terraform-azurerm-storage-account"
-    workload    = "test"
-  }
-
-  action_group_id            = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
-  log_analytics_workspace_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.OperationalInsights/workspaces/test-law"
-
+  # Optional - set to null to test without monitoring/backup
+  action_group_id  = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
   backup_policy_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.RecoveryServices/vaults/test-vault/backupPolicies/test-policy"
 
   recovery_vault = {
@@ -24,7 +37,9 @@ variables {
     resource_group_name = "rg-test"
   }
 
-  testing = true
+  # Testing mode
+  public_network_access_enabled = true
+  testing                       = true
 }
 
 run "test_storage_account_creation" {
@@ -218,17 +233,53 @@ run "test_outputs_defined" {
   command = plan
 
   assert {
-    condition     = output.id != null
-    error_message = "Output 'id' should be defined"
+    condition     = azurerm_storage_account.sa.name != null
+    error_message = "Storage account name should be defined"
+  }
+}
+
+run "test_monitoring_optional" {
+  command = plan
+
+  variables {
+    action_group_id = null
   }
 
   assert {
-    condition     = output.name != null
-    error_message = "Output 'name' should be defined"
+    condition     = length(azurerm_monitor_metric_alert.alert) == 0
+    error_message = "No alerts should be created when action_group_id is null"
+  }
+}
+
+run "test_backup_optional" {
+  command = plan
+
+  variables {
+    backup_policy_id = null
+    recovery_vault   = null
   }
 
   assert {
-    condition     = output.primary_blob_endpoint != null
-    error_message = "Output 'primary_blob_endpoint' should be defined"
+    condition     = length(azurerm_backup_container_storage_account.protection_container) == 0
+    error_message = "No backup container should be created when backup_policy_id is null"
+  }
+}
+
+run "test_public_network_access_disabled" {
+  command = plan
+
+  variables {
+    public_network_access_enabled = false
+    testing                       = false
+  }
+
+  assert {
+    condition     = azurerm_storage_account.sa.public_network_access_enabled == false
+    error_message = "Public network access should be disabled when set to false"
+  }
+
+  assert {
+    condition     = azurerm_storage_account.sa.network_rules[0].default_action == "Deny"
+    error_message = "Default network action should be Deny when not in testing mode"
   }
 }

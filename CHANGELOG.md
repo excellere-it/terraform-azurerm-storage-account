@@ -16,10 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions test workflow for comprehensive CI/CD
 - GitHub Actions release workflow
 - Workflow documentation in .github/workflows/README.md
+- Comprehensive module header documentation (80+ lines) in main.tf
+- Section headers for improved code organization in all files
+- New `public_network_access_enabled` variable for explicit public access control
+- Additional test cases for optional monitoring and backup features
+- `shares` output for accessing created file shares
 
 ### Changed
-- Improved documentation structure and generation
-- Enhanced module development workflow
+- **BREAKING**: Refactored terraform-namer integration to use direct inputs (`contact`, `environment`, `location`, `repository`, `workload`) instead of `name` object
+- **BREAKING**: Made `action_group_id` optional (default: null) - monitoring alerts now optional
+- **BREAKING**: Made `backup_policy_id` optional (default: null) - backup protection now optional
+- **BREAKING**: Made `recovery_vault` optional (default: null) - only required when backup is enabled
+- Improved variable descriptions and organization with logical grouping
+- Enhanced output descriptions for better clarity
+- Updated all examples to use new variable structure
+- Improved test coverage with optional feature testing
 
 ## [0.0.4] - Previous Release
 

@@ -1,22 +1,35 @@
 # Input validation tests for the storage account module
 
+# =============================================================================
+# MOCK PROVIDER CONFIGURATION
+# =============================================================================
+
+# Mock provider configuration for plan-only testing
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
+}
+
+# =============================================================================
+# TEST VARIABLES
+# =============================================================================
+
 variables {
+  # Required variables
+  contact                    = "test@example.com"
+  environment                = "sbx"
+  location                   = "centralus"
+  repository                 = "terraform-azurerm-storage-account"
+  workload                   = "test"
+  log_analytics_workspace_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.OperationalInsights/workspaces/test-law"
+
   resource_group = {
     name     = "rg-test-storage"
     location = "centralus"
   }
 
-  name = {
-    contact     = "test@example.com"
-    environment = "sbx"
-    instance    = 1
-    repository  = "terraform-azurerm-storage-account"
-    workload    = "test"
-  }
-
-  action_group_id            = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
-  log_analytics_workspace_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.OperationalInsights/workspaces/test-law"
-
+  # Optional - set to null to test without monitoring/backup
+  action_group_id  = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
   backup_policy_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.RecoveryServices/vaults/test-vault/backupPolicies/test-policy"
 
   recovery_vault = {
@@ -24,7 +37,9 @@ variables {
     resource_group_name = "rg-test"
   }
 
-  testing = true
+  # Testing mode
+  public_network_access_enabled = true
+  testing                        = true
 }
 
 run "test_invalid_expiration_days_zero" {
@@ -123,7 +138,7 @@ run "test_private_endpoint_enabled_without_subnet" {
     private_endpoint = {
       enabled     = true
       subnet_id   = null
-      subresource = { blob = ["id"] }
+      subresource = { blob = ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"] }
     }
   }
 
@@ -172,7 +187,10 @@ run "test_private_endpoint_enabled_with_full_config" {
     private_endpoint = {
       enabled     = true
       subnet_id   = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/virtualNetworks/vnet-test/subnets/subnet-test"
-      subresource = { blob = ["id1"], file = ["id2"] }
+      subresource = {
+        blob = ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"],
+        file = ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/privateDnsZones/privatelink.file.core.windows.net"]
+      }
     }
   }
 

@@ -1,6 +1,5 @@
 locals {
   location       = "centralus"
-  tags           = module.name.tags
   test_namespace = random_pet.instance_id.id
 }
 
@@ -10,20 +9,17 @@ resource "azurerm_log_analytics_workspace" "example" {
   resource_group_name = azurerm_resource_group.example.name
   retention_in_days   = 30
   sku                 = "PerGB2018"
-  tags                = local.tags
 }
 
 resource "azurerm_monitor_action_group" "example" {
   name                = "CriticalAlertsAction"
   resource_group_name = azurerm_resource_group.example.name
   short_name          = "p0action"
-  tags                = local.tags
 }
 
 resource "azurerm_resource_group" "example" {
   location = local.location
   name     = "rg-${local.test_namespace}"
-  tags     = local.tags
 }
 
 resource "azurerm_virtual_network" "example" {
@@ -31,7 +27,6 @@ resource "azurerm_virtual_network" "example" {
   location            = azurerm_resource_group.example.location
   name                = "vnet-${local.test_namespace}"
   resource_group_name = azurerm_resource_group.example.name
-  tags                = local.tags
 }
 
 resource "azurerm_subnet" "example" {
@@ -49,7 +44,6 @@ resource "azurerm_private_dns_zone" "example" {
 
   name                = each.value
   resource_group_name = azurerm_resource_group.example.name
-  tags                = local.tags
 }
 
 
@@ -60,7 +54,6 @@ resource "azurerm_recovery_services_vault" "example" {
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   sku                 = "Standard"
-  tags                = local.tags
 }
 
 resource "azurerm_backup_policy_file_share" "example" {
@@ -101,29 +94,30 @@ resource "azurerm_backup_policy_file_share" "example" {
 module "example" {
   source = "../.."
 
-  action_group_id            = azurerm_monitor_action_group.example.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
+  # Required variables
+  contact                    = "nobody@infoex.dev"
+  environment                = "sbx"
+  location                   = local.location
+  repository                 = "terraform-azurerm-storage-account"
+  workload                   = "apps"
   resource_group             = azurerm_resource_group.example
-  testing                    = true
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
+
+  # Optional monitoring and backup
+  action_group_id  = azurerm_monitor_action_group.example.id
+  backup_policy_id = azurerm_backup_policy_file_share.example.id
+  recovery_vault = {
+    name                = azurerm_recovery_services_vault.example.name
+    resource_group_name = azurerm_resource_group.example.name
+  }
+
+  # Storage configuration
+  public_network_access_enabled = true
+  testing                       = true
 
   containers = [
     "sqlreports"
   ]
-
-  name = {
-    contact     = "nobody@infoex.dev"
-    environment = "sbx"
-    instance    = 1303
-    program     = "dyl"
-    repository  = "terraform-azurerm-storage-account"
-    workload    = "apps"
-  }
-
-  private_endpoint = {
-    enabled     = true
-    subnet_id   = azurerm_subnet.example.id
-    subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
-  }
 
   shares = {
     university-success = {},
@@ -132,9 +126,9 @@ module "example" {
     }
   }
 
-  backup_policy_id = azurerm_backup_policy_file_share.example.id
-  recovery_vault = {
-    name                = azurerm_recovery_services_vault.example.name
-    resource_group_name = azurerm_resource_group.example.name
+  private_endpoint = {
+    enabled     = true
+    subnet_id   = azurerm_subnet.example.id
+    subresource = { for k, v in azurerm_private_dns_zone.example : k => [v.id] }
   }
 }

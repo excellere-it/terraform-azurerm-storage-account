@@ -1,48 +1,64 @@
-variable "is_global" {
-  description = "Is the resource considered a global resource"
-  type        = bool
-  default     = false
-}
+# =============================================================================
+# Required Variables - terraform-namer Inputs
+# =============================================================================
 
-variable "action_group_id" {
-  description = "The ID of the action group to send alerts to."
+variable "contact" {
   type        = string
+  description = "Contact email for resource ownership and notifications"
 }
 
-variable "backup_policy_id" {
-  description = "Backup Policy ID"
+variable "environment" {
   type        = string
+  description = "Environment name (dev, stg, prd, etc.)"
 }
 
-variable "containers" {
-  default     = []
-  description = "When provided the module will create private blob containers for each item in the list."
-  type        = list(string)
+variable "location" {
+  type        = string
+  description = "Azure region where the Storage Account will be deployed"
 }
 
-variable "expiration_days" {
-  default     = 365
-  description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag."
-  type        = number
+variable "repository" {
+  type        = string
+  description = "Source repository name for tracking and documentation"
+}
 
-  validation {
-    condition     = 0 < var.expiration_days
-    error_message = "Expiration days must be greater than zero."
-  }
+variable "workload" {
+  type        = string
+  description = "Workload or application name for resource identification"
+}
+
+# =============================================================================
+# Required Variables - Resource Configuration
+# =============================================================================
+
+variable "resource_group" {
+  description = "The resource group to deploy resources into"
+  type = object({
+    location = string
+    name     = string
+  })
 }
 
 variable "log_analytics_workspace_id" {
-  description = "The workspace to write logs into."
+  description = "The workspace to write logs into for diagnostic settings"
   type        = string
 }
 
-variable "ip_restriction" {
-  description = "The IP restriction configuration."
+# =============================================================================
+# Optional Variables - Network Configuration
+# =============================================================================
 
+variable "public_network_access_enabled" {
+  type        = bool
+  description = "Whether public network access is enabled for the storage account. Set to true for testing, false for production security"
+  default     = false
+}
+
+variable "ip_restriction" {
+  description = "The IP restriction configuration for network rules"
   default = {
     enabled = false
   }
-
   type = object({
     enabled = bool
     ip = optional(map(object({
@@ -57,31 +73,11 @@ variable "ip_restriction" {
   }
 }
 
-variable "name" {
-  description = "The name tokens used to construct the resource name and tags."
-  type = object({
-    contact     = string
-    environment = string
-    instance    = optional(number)
-    program     = optional(string)
-    repository  = string
-    workload    = string
-  })
-}
-
-variable "optional_tags" {
-  default     = {}
-  description = "A map of additional tags for the resource."
-  type        = map(string)
-}
-
 variable "private_endpoint" {
-  description = "The private endpoint configuration."
-
+  description = "The private endpoint configuration for secure connectivity"
   default = {
     enabled = false
   }
-
   type = object({
     enabled     = bool
     subnet_id   = optional(string)
@@ -99,41 +95,84 @@ variable "private_endpoint" {
   }
 }
 
-variable "recovery_vault" {
-  description = "recovery vault"
-  type = object({
-    resource_group_name = string
-    name                = string
-  })
+# =============================================================================
+# Optional Variables - Storage Configuration
+# =============================================================================
 
+variable "sku" {
+  default     = "RAGZRS"
+  description = "The SKU to use for the storage account (RAGZRS, GRS, LRS, ZRS)"
+  type        = string
 }
 
-variable "resource_group" {
-  description = "The resource group to deploy resources into"
-
-  type = object({
-    location = string
-    name     = string
-  })
+variable "containers" {
+  default     = []
+  description = "List of blob container names to create with private access"
+  type        = list(string)
 }
 
 variable "shares" {
   default     = {}
-  description = "When provided the module will create file shares for each item in the list with optional quota."
+  description = "Map of file share names to configuration with optional quota in GB"
   type = map(object({
     quota = optional(number)
   }))
 }
 
-variable "sku" {
-  default     = "RAGZRS"
-  description = "The SKU to use for the storage account."
-  type        = string
+variable "is_global" {
+  description = "Whether the resource is considered a global resource (affects naming location)"
+  type        = bool
+  default     = false
 }
 
 variable "testing" {
   default     = false
-  description = "When true the module will use the testing options; for example public access will be enabled."
+  description = "When true the module will use testing mode with relaxed network rules (Allow instead of Deny)"
   type        = bool
+}
 
+# =============================================================================
+# Optional Variables - Monitoring and Backup
+# =============================================================================
+
+variable "action_group_id" {
+  description = "The ID of the action group to send alerts to. Set to null to disable monitoring alerts"
+  type        = string
+  default     = null
+}
+
+variable "backup_policy_id" {
+  description = "Backup Policy ID for file share protection. Set to null to disable backup"
+  type        = string
+  default     = null
+}
+
+variable "recovery_vault" {
+  description = "Recovery vault configuration for backup protection. Required if backup_policy_id is set"
+  type = object({
+    resource_group_name = string
+    name                = string
+  })
+  default = null
+}
+
+# =============================================================================
+# Optional Variables - Tagging
+# =============================================================================
+
+variable "expiration_days" {
+  default     = 365
+  description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag"
+  type        = number
+
+  validation {
+    condition     = 0 < var.expiration_days
+    error_message = "Expiration days must be greater than zero."
+  }
+}
+
+variable "optional_tags" {
+  default     = {}
+  description = "A map of additional tags to apply to the resource"
+  type        = map(string)
 }
