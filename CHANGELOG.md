@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2025-10-29
+
+### Fixed
+- Fixed private_endpoint module call to match private-link v0.0.2 interface
+  - Added required `name` object with terraform-namer inputs
+  - Changed `tags` to `optional_tags` parameter
+  - Removed unsupported `resource_prefix` argument
+- Resolved terraform plan failures: "Missing required argument: name", "Unsupported argument: resource_prefix", "Unsupported argument: tags"
+
 ## [0.0.3] - 2025-10-29
 
 ### Added
@@ -117,6 +126,7 @@ When upgrading between versions, check the relevant sections above for:
 
 ---
 
-[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.3...HEAD
-[0.0.3]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...0.0.3
-[0.0.4]: https://github.com/infoex/terraform-azurerm-storage-account/releases/tag/0.0.4
+[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...HEAD
+[0.0.4]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/infoex/terraform-azurerm-storage-account/releases/tag/0.0.2
