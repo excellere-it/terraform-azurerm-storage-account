@@ -191,7 +191,7 @@ module "diagnostics" {
 
 module "private_endpoint" {
   source  = "app.terraform.io/infoex/private-link/azurerm"
-  version = "0.0.1"
+  version = "0.0.2"
 
   resource_group  = var.resource_group
   resource_id     = azurerm_storage_account.sa.id
