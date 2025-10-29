@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2025-10-29
+
+### Fixed
+- Replaced deprecated `enable_https_traffic_only` with `https_traffic_only_enabled` to prepare for Azure Provider v4.0
+
 ## [0.0.4] - 2025-10-29
 
 ### Fixed
@@ -126,7 +131,8 @@ When upgrading between versions, check the relevant sections above for:
 
 ---
 
-[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...HEAD
+[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.5...HEAD
+[0.0.5]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/infoex/terraform-azurerm-storage-account/releases/tag/0.0.2
