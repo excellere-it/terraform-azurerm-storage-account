@@ -193,12 +193,19 @@ module "private_endpoint" {
   source  = "app.terraform.io/infoex/private-link/azurerm"
   version = "0.0.2"
 
-  resource_group  = var.resource_group
-  resource_id     = azurerm_storage_account.sa.id
-  resource_prefix = azurerm_storage_account.sa.name
-  subnet_id       = var.private_endpoint.subnet_id
-  subresource     = local.subresource
-  tags            = module.naming.tags
+  name = {
+    contact     = var.contact
+    environment = var.environment
+    location    = var.location
+    repository  = var.repository
+    workload    = var.workload
+  }
+
+  resource_group = var.resource_group
+  resource_id    = azurerm_storage_account.sa.id
+  subnet_id      = var.private_endpoint.subnet_id
+  subresource    = local.subresource
+  optional_tags  = var.optional_tags
 }
 
 # =============================================================================
