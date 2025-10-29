@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2025-10-29
+
 ### Added
 - Comprehensive .gitignore with extensive patterns for development environments
 - Enhanced Makefile with full development workflow automation
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING**: Made `action_group_id` optional (default: null) - monitoring alerts now optional
 - **BREAKING**: Made `backup_policy_id` optional (default: null) - backup protection now optional
 - **BREAKING**: Made `recovery_vault` optional (default: null) - only required when backup is enabled
+- Updated private-link module dependency to version 0.0.2
 - Improved variable descriptions and organization with logical grouping
 - Enhanced output descriptions for better clarity
 - Updated all examples to use new variable structure
@@ -114,5 +117,6 @@ When upgrading between versions, check the relevant sections above for:
 
 ---
 
-[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...HEAD
+[Unreleased]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.3...HEAD
+[0.0.3]: https://github.com/infoex/terraform-azurerm-storage-account/compare/0.0.4...0.0.3
 [0.0.4]: https://github.com/infoex/terraform-azurerm-storage-account/releases/tag/0.0.4
