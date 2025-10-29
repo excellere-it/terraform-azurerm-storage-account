@@ -80,7 +80,8 @@
 # =============================================================================
 
 module "naming" {
-  source = "../terraform-terraform-namer"
+  source  = "app.terraform.io/infoex/namer/terraform"
+  version = "0.0.3"
 
   contact       = var.contact
   environment   = var.environment
@@ -171,7 +172,8 @@ resource "azurerm_storage_share" "share" {
 }
 
 module "diagnostics" {
-  source = "../terraform-azurerm-diagnostics"
+  source  = "app.terraform.io/infoex/diagnostics/azurerm"
+  version = "0.0.2"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
@@ -188,7 +190,8 @@ module "diagnostics" {
 }
 
 module "private_endpoint" {
-  source = "../terraform-azurerm-private-link"
+  source  = "app.terraform.io/infoex/private-link/azurerm"
+  version = "0.0.1"
 
   resource_group  = var.resource_group
   resource_id     = azurerm_storage_account.sa.id
