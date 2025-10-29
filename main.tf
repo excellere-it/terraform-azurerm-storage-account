@@ -122,7 +122,7 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type          = var.sku
   account_tier                      = "Standard"
   allow_nested_items_to_be_public   = false
-  enable_https_traffic_only         = true
+  https_traffic_only_enabled        = true
   infrastructure_encryption_enabled = true
   location                          = var.resource_group.location
   min_tls_version                   = "TLS1_2"
