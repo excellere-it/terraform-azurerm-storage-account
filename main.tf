@@ -81,7 +81,7 @@
 
 module "naming" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.3"
+  version = "0.0.1"
 
   contact       = var.contact
   environment   = var.environment
@@ -173,7 +173,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.2"
+  version = "0.0.1"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
@@ -191,7 +191,7 @@ module "diagnostics" {
 
 module "private_endpoint" {
   source  = "app.terraform.io/infoex/private-link/azurerm"
-  version = "0.0.2"
+  version = "0.0.1"
 
   name = {
     contact     = var.contact
