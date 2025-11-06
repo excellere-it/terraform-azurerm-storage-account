@@ -39,7 +39,7 @@ variables {
 
   # Testing mode
   public_network_access_enabled = true
-  testing                        = true
+  testing                       = true
 }
 
 run "test_invalid_expiration_days_zero" {
@@ -185,8 +185,8 @@ run "test_private_endpoint_enabled_with_full_config" {
 
   variables {
     private_endpoint = {
-      enabled     = true
-      subnet_id   = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/virtualNetworks/vnet-test/subnets/subnet-test"
+      enabled   = true
+      subnet_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/virtualNetworks/vnet-test/subnets/subnet-test"
       subresource = {
         blob = ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"],
         file = ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Network/privateDnsZones/privatelink.file.core.windows.net"]
