@@ -157,6 +157,19 @@ variable "recovery_vault" {
 }
 
 # =============================================================================
+# Optional Variables - Encryption
+# =============================================================================
+
+variable "customer_managed_key" {
+  description = "Customer-managed key configuration for storage account encryption. Requires user_assigned_identity_id to be set"
+  type = object({
+    key_vault_key_id          = string
+    user_assigned_identity_id = string
+  })
+  default = null
+}
+
+# =============================================================================
 # Optional Variables - Tagging
 # =============================================================================
 

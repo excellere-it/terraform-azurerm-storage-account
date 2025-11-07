@@ -141,8 +141,22 @@ resource "azurerm_storage_account" "sa" {
     retention_policy { days = 30 }
   }
 
+  # Identity configuration
+  # SystemAssigned for general access, UserAssigned added when CMK is enabled
   identity {
-    type = "SystemAssigned"
+    type = var.customer_managed_key != null ? "SystemAssigned, UserAssigned" : "SystemAssigned"
+    identity_ids = var.customer_managed_key != null ? [
+      var.customer_managed_key.user_assigned_identity_id
+    ] : null
+  }
+
+  # Customer-managed key encryption (optional)
+  dynamic "customer_managed_key" {
+    for_each = var.customer_managed_key != null ? [var.customer_managed_key] : []
+    content {
+      key_vault_key_id          = customer_managed_key.value.key_vault_key_id
+      user_assigned_identity_id = customer_managed_key.value.user_assigned_identity_id
+    }
   }
 
   network_rules {
