@@ -326,74 +326,303 @@ module "example" {
 }
 ```
 
-## Inputs
+## Required Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id) | The ID of the action group to send alerts to. Set to null to disable monitoring alerts | `string` | `null` | no |
-| <a name="input_backup_policy_id"></a> [backup\_policy\_id](#input\_backup\_policy\_id) | Backup Policy ID for file share protection. Set to null to disable backup | `string` | `null` | no |
-| <a name="input_contact"></a> [contact](#input\_contact) | Contact email for resource ownership and notifications | `string` | n/a | yes |
-| <a name="input_containers"></a> [containers](#input\_containers) | List of blob container names to create with private access | `list(string)` | `[]` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment name (dev, stg, prd, etc.) | `string` | n/a | yes |
-| <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days) | Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag | `number` | `365` | no |
-| <a name="input_ip_restriction"></a> [ip\_restriction](#input\_ip\_restriction) | The IP restriction configuration for network rules | <pre>object({<br/>    enabled = bool<br/>    ip = optional(map(object({<br/>      ip_address = string<br/>      name       = string<br/>    })))<br/>  })</pre> | <pre>{<br/>  "enabled": false<br/>}</pre> | no |
-| <a name="input_is_global"></a> [is\_global](#input\_is\_global) | Whether the resource is considered a global resource (affects naming location) | `bool` | `false` | no |
-| <a name="input_location"></a> [location](#input\_location) | Azure region where the Storage Account will be deployed | `string` | n/a | yes |
-| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | The workspace to write logs into for diagnostic settings | `string` | n/a | yes |
-| <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags) | A map of additional tags to apply to the resource | `map(string)` | `{}` | no |
-| <a name="input_private_endpoint"></a> [private\_endpoint](#input\_private\_endpoint) | The private endpoint configuration for secure connectivity | <pre>object({<br/>    enabled     = bool<br/>    subnet_id   = optional(string)<br/>    subresource = optional(map(list(string)))<br/>  })</pre> | <pre>{<br/>  "enabled": false<br/>}</pre> | no |
-| <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether public network access is enabled for the storage account. Set to true for testing, false for production security | `bool` | `false` | no |
-| <a name="input_recovery_vault"></a> [recovery\_vault](#input\_recovery\_vault) | Recovery vault configuration for backup protection. Required if backup\_policy\_id is set | <pre>object({<br/>    resource_group_name = string<br/>    name                = string<br/>  })</pre> | `null` | no |
-| <a name="input_repository"></a> [repository](#input\_repository) | Source repository name for tracking and documentation | `string` | n/a | yes |
-| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | The resource group to deploy resources into | <pre>object({<br/>    location = string<br/>    name     = string<br/>  })</pre> | n/a | yes |
-| <a name="input_shares"></a> [shares](#input\_shares) | Map of file share names to configuration with optional quota in GB | <pre>map(object({<br/>    quota = optional(number)<br/>  }))</pre> | `{}` | no |
-| <a name="input_sku"></a> [sku](#input\_sku) | The SKU to use for the storage account (RAGZRS, GRS, LRS, ZRS) | `string` | `"RAGZRS"` | no |
-| <a name="input_testing"></a> [testing](#input\_testing) | When true the module will use testing mode with relaxed network rules (Allow instead of Deny) | `bool` | `false` | no |
-| <a name="input_workload"></a> [workload](#input\_workload) | Workload or application name for resource identification | `string` | n/a | yes |
+The following input variables are required:
+
+### <a name="input_contact"></a> [contact](#input\_contact)
+
+Description: Contact email for resource ownership and notifications
+
+Type: `string`
+
+### <a name="input_environment"></a> [environment](#input\_environment)
+
+Description: Environment name (dev, stg, prd, etc.)
+
+Type: `string`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: Azure region where the Storage Account will be deployed
+
+Type: `string`
+
+### <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id)
+
+Description: The workspace to write logs into for diagnostic settings
+
+Type: `string`
+
+### <a name="input_repository"></a> [repository](#input\_repository)
+
+Description: Source repository name for tracking and documentation
+
+Type: `string`
+
+### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
+
+Description: The resource group to deploy resources into
+
+Type:
+
+```hcl
+object({
+    location = string
+    name     = string
+  })
+```
+
+### <a name="input_workload"></a> [workload](#input\_workload)
+
+Description: Workload or application name for resource identification
+
+Type: `string`
+
+## Optional Inputs
+
+The following input variables are optional (have default values):
+
+### <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id)
+
+Description: The ID of the action group to send alerts to. Set to null to disable monitoring alerts
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_backup_policy_id"></a> [backup\_policy\_id](#input\_backup\_policy\_id)
+
+Description: Backup Policy ID for file share protection. Set to null to disable backup
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_containers"></a> [containers](#input\_containers)
+
+Description: List of blob container names to create with private access
+
+Type: `list(string)`
+
+Default: `[]`
+
+### <a name="input_customer_managed_key"></a> [customer\_managed\_key](#input\_customer\_managed\_key)
+
+Description: Customer-managed key configuration for storage account encryption. Requires user\_assigned\_identity\_id to be set
+
+Type:
+
+```hcl
+object({
+    key_vault_key_id          = string
+    user_assigned_identity_id = string
+  })
+```
+
+Default: `null`
+
+### <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days)
+
+Description: Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag
+
+Type: `number`
+
+Default: `365`
+
+### <a name="input_ip_restriction"></a> [ip\_restriction](#input\_ip\_restriction)
+
+Description: The IP restriction configuration for network rules
+
+Type:
+
+```hcl
+object({
+    enabled = bool
+    ip = optional(map(object({
+      ip_address = string
+      name       = string
+    })))
+  })
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
+
+### <a name="input_is_global"></a> [is\_global](#input\_is\_global)
+
+Description: Whether the resource is considered a global resource (affects naming location)
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
+
+Description: A map of additional tags to apply to the resource
+
+Type: `map(string)`
+
+Default: `{}`
+
+### <a name="input_private_endpoint"></a> [private\_endpoint](#input\_private\_endpoint)
+
+Description: The private endpoint configuration for secure connectivity
+
+Type:
+
+```hcl
+object({
+    enabled     = bool
+    subnet_id   = optional(string)
+    subresource = optional(map(list(string)))
+  })
+```
+
+Default:
+
+```json
+{
+  "enabled": false
+}
+```
+
+### <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled)
+
+Description: Whether public network access is enabled for the storage account. Set to true for testing, false for production security
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_recovery_vault"></a> [recovery\_vault](#input\_recovery\_vault)
+
+Description: Recovery vault configuration for backup protection. Required if backup\_policy\_id is set
+
+Type:
+
+```hcl
+object({
+    resource_group_name = string
+    name                = string
+  })
+```
+
+Default: `null`
+
+### <a name="input_shares"></a> [shares](#input\_shares)
+
+Description: Map of file share names to configuration with optional quota in GB
+
+Type:
+
+```hcl
+map(object({
+    quota = optional(number)
+  }))
+```
+
+Default: `{}`
+
+### <a name="input_sku"></a> [sku](#input\_sku)
+
+Description: The SKU to use for the storage account (RAGZRS, GRS, LRS, ZRS)
+
+Type: `string`
+
+Default: `"RAGZRS"`
+
+### <a name="input_testing"></a> [testing](#input\_testing)
+
+Description: When true the module will use testing mode with relaxed network rules (Allow instead of Deny)
+
+Type: `bool`
+
+Default: `false`
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_containers"></a> [containers](#output\_containers) | The storage account blob containers |
-| <a name="output_id"></a> [id](#output\_id) | The Storage Account resource ID |
-| <a name="output_name"></a> [name](#output\_name) | The Storage Account name |
-| <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key) | The primary access key for the storage account |
-| <a name="output_primary_blob_endpoint"></a> [primary\_blob\_endpoint](#output\_primary\_blob\_endpoint) | The primary blob endpoint URL |
-| <a name="output_primary_connection_string"></a> [primary\_connection\_string](#output\_primary\_connection\_string) | The primary connection string for the storage account |
-| <a name="output_shares"></a> [shares](#output\_shares) | The storage account file shares |
+The following outputs are exported:
+
+### <a name="output_containers"></a> [containers](#output\_containers)
+
+Description: The storage account blob containers
+
+### <a name="output_id"></a> [id](#output\_id)
+
+Description: The Storage Account resource ID
+
+### <a name="output_name"></a> [name](#output\_name)
+
+Description: The Storage Account name
+
+### <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key)
+
+Description: The primary access key for the storage account
+
+### <a name="output_primary_blob_endpoint"></a> [primary\_blob\_endpoint](#output\_primary\_blob\_endpoint)
+
+Description: The primary blob endpoint URL
+
+### <a name="output_primary_connection_string"></a> [primary\_connection\_string](#output\_primary\_connection\_string)
+
+Description: The primary connection string for the storage account
+
+### <a name="output_shares"></a> [shares](#output\_shares)
+
+Description: The storage account file shares
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [azurerm_backup_container_storage_account.protection_container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_container_storage_account) | resource |
-| [azurerm_backup_protected_file_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_protected_file_share) | resource |
-| [azurerm_monitor_metric_alert.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) | resource |
-| [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
-| [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
-| [azurerm_storage_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_share) | resource |
+The following resources are used by this module:
+
+- [azurerm_backup_container_storage_account.protection_container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_container_storage_account) (resource)
+- [azurerm_backup_protected_file_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/backup_protected_file_share) (resource)
+- [azurerm_monitor_metric_alert.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert) (resource)
+- [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
+- [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) (resource)
+- [azurerm_storage_share.share](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_share) (resource)
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.5 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.47 |
+The following requirements are needed by this module:
+
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
+
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.47)
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
+The following providers are used by this module:
+
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (3.117.1)
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics) | app.terraform.io/infoex/diagnostics/azurerm | 0.0.2 |
-| <a name="module_naming"></a> [naming](#module\_naming) | app.terraform.io/infoex/namer/terraform | 0.0.3 |
-| <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | app.terraform.io/infoex/private-link/azurerm | 0.0.2 |
+The following Modules are called:
+
+### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
+
+Source: app.terraform.io/infoex/diagnostics/azurerm
+
+Version: 0.0.1
+
+### <a name="module_naming"></a> [naming](#module\_naming)
+
+Source: app.terraform.io/infoex/namer/terraform
+
+Version: 0.0.1
+
+### <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint)
+
+Source: app.terraform.io/infoex/private-link/azurerm
+
+Version: 0.0.1
 <!-- END_TF_DOCS -->
 
 ## Security Review
