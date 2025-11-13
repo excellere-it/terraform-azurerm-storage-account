@@ -187,7 +187,7 @@ resource "azurerm_storage_share" "share" {
 
 module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.5"
+  version = "0.0.6"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
