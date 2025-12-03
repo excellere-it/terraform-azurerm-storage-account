@@ -80,8 +80,7 @@
 # =============================================================================
 
 module "naming" {
-  source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.2"
+  source = "git::https://github.com/excellere-it/terraform-namer.git"
 
   contact       = var.contact
   environment   = var.environment
@@ -186,8 +185,7 @@ resource "azurerm_storage_share" "share" {
 }
 
 module "diagnostics" {
-  source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.7"
+  source = "git::https://github.com/excellere-it/terraform-azurerm-diagnostics.git"
 
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
@@ -204,8 +202,7 @@ module "diagnostics" {
 }
 
 module "private_endpoint" {
-  source  = "app.terraform.io/infoex/private-link/azurerm"
-  version = "0.0.7"
+  source = "git::https://github.com/excellere-it/terraform-azurerm-private-link.git"
 
   name = {
     contact     = var.contact

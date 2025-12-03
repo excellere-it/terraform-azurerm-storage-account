@@ -1,6 +1,5 @@
 module "name" {
-  source  = "app.terraform.io/infoex/namer/terraform"
-  version = "~> 0.0"
+  source = "git::https://github.com/excellere-it/terraform-namer.git"
 
   contact     = "nobody@infoex.dev"
   environment = "sbx"
